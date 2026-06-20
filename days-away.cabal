@@ -44,6 +44,7 @@ executable days-away-exe
   main-is: Main.hs
   other-modules:
       IO
+      Types
       Validation
       Paths_days_away
   autogen-modules:

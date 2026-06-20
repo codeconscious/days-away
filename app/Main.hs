@@ -3,7 +3,7 @@
 
 module Main (main) where
 
-import Lib (RowSummary(..))
+import Types (RowSummary(..))
 import IO (readSmallFile)
 import Validation (checkArgs, checkExtension)
 import qualified Data.Text as T
