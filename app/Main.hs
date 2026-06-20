@@ -4,7 +4,7 @@
 {-# HLINT ignore "Redundant lambda" #-}
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 {-# OPTIONS_GHC -fwarn-name-shadowing #-}
--- {-# OPTIONS_GHC -Wno-unused-top-binds #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 
 module Main (main) where
 
