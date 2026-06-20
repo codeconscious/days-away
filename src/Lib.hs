@@ -1,7 +1,4 @@
-module Lib
-    -- ( someFunc
-    -- )
-where
+module Lib (RowSummary(..)) where
 
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 
