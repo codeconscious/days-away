@@ -1,6 +1,6 @@
 module Lib (RowSummary(..)) where
 
-import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
+import Data.Time (Day)
 
 data RowSummary = RowSummary {
       category :: String
