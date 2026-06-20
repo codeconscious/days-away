@@ -1,22 +1,14 @@
-{-# OPTIONS_GHC -Wall -Werror #-} -- Treat warnings as errors.
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-} -- Suppress such warnings.
-{-# OPTIONS_GHC -Wno-unused-imports #-}
-{-# HLINT ignore "Redundant lambda" #-}
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 {-# OPTIONS_GHC -fwarn-name-shadowing #-}
-{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 
 module Main (main) where
 
 import Lib (RowSummary(category, RowSummary))
-import IO (readSmallFile')
+import IO (readSmallFile)
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
-import Control.Exception (IOException, try)
 import Control.Monad (unless)
-import Control.Monad.Except (liftEither, runExceptT, MonadError(throwError), ExceptT)
+import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
-import Data.Bifunctor (first)
 import Data.Char (toLower)
 import Data.Either (partitionEithers)
 import Data.List (sortBy)
@@ -34,7 +26,7 @@ main =
         computation :: ExceptT String IO () = do
             fileName <- checkArgs
             checkExtension fileName
-            content <- readSmallFile' fileName
+            content <- readSmallFile fileName
             let lines_    = T.lines content
                 lineCount = show $ length lines_
                 charCount = show $ T.length content
