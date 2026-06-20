@@ -3,7 +3,7 @@
 
 module Main (main) where
 
-import Lib (RowSummary(category, RowSummary))
+import Lib (RowSummary(..))
 import IO (readSmallFile)
 import Validation (checkArgs, checkExtension)
 import qualified Data.Text as T
@@ -13,7 +13,6 @@ import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
 import Data.List (sortBy)
 import Data.Ord (comparing)
-import Data.Text (Text)
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
 
@@ -35,7 +34,7 @@ main =
                 printSummaries summaries
                 printErrors errors
 
-parseLine :: Text -> ExceptT String IO RowSummary
+parseLine :: T.Text -> ExceptT String IO RowSummary
 parseLine text = do
     now <- liftIO $ utctDay <$> getCurrentTime
     case T.splitOn separator text of
