@@ -5,18 +5,16 @@ module Main (main) where
 
 import Lib (RowSummary(category, RowSummary))
 import IO (readSmallFile)
+import Validation (checkArgs, checkExtension)
 import qualified Data.Text as T
 import Control.Monad (unless)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
-import Data.Char (toLower)
 import Data.Either (partitionEithers)
 import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.Text (Text)
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
-import System.Environment (getArgs)
-import System.FilePath (takeExtension)
 import Text.Read (readEither)
 
 main :: IO ()
@@ -36,22 +34,6 @@ main =
                 (errors, summaries) <- partitionEithers <$> results
                 printSummaries summaries
                 printErrors errors
-
-checkArgs :: ExceptT String IO FilePath
-checkArgs = do
-    args <- liftIO getArgs
-    case args of
-        []    -> throwError "You must provide the name of a CSV as an argument."
-        [arg] -> return arg
-        _     -> throwError "Too many arguments! Provide only the name of a CSV containing dates."
-
-checkExtension :: FilePath -> ExceptT String IO ()
-checkExtension path
-    | isSupportedExt = return ()
-    | otherwise      = throwError $ "Invalid file extension: " ++ ext
-    where
-        ext = map toLower $ takeExtension path
-        isSupportedExt = ext == ".csv"
 
 parseLine :: Text -> ExceptT String IO RowSummary
 parseLine text = do
