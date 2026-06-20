@@ -68,7 +68,9 @@ parseLine text = do
         [c, s, d] ->
             let parsedDay = readEither $ T.unpack d :: Either String Day in
             case parsedDay of
-                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack d ++ "\" in line with category " ++ show (T.unpack c) ++ " and summary " ++ show (T.unpack s) ++ ": `" ++ err ++ "`"
+                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack d ++ "\" in line \
+                                          \with category " ++ show (T.unpack c) ++ " \
+                                          \and summary " ++ show (T.unpack s) ++ ": `" ++ err ++ "`."
                 Right day -> return $ RowSummary (T.unpack c) (T.unpack $ T.strip s) day (diffDays now day)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
     where
