@@ -27,7 +27,7 @@ main =
             let lines_    = T.lines content
                 lineCount = show $ length lines_
                 charCount = show $ T.length content
-                results   = traverse (runExceptT . parseLine) lines_ -- 同じ: mapM runExceptT . fmap parseLine
+                results   = traverse (runExceptT . parseLine) lines_
             liftIO $ do
                 putStrLn $ "This file has " ++ lineCount ++ " line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
