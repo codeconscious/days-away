@@ -5,7 +5,7 @@ module Main (main) where
 
 import Types (RowSummary(..))
 import IO (readSmallFile)
-import Validation (checkArgs, checkExtension, verifyNotNull)
+import Validation (checkArgs, validateExtension, validateContent)
 import qualified Data.Text as T
 import Control.Monad (unless)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
@@ -22,9 +22,9 @@ main =
     where
         computation :: ExceptT String IO () = do
             fileName <- checkArgs
-            checkExtension fileName
+            validateExtension fileName
             content <- readSmallFile fileName
-            verifyNotNull content
+            validateContent content
             let lines_    = T.lines content
                 lineCount = show $ length lines_
                 charCount = show $ T.length content

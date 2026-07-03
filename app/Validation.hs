@@ -1,7 +1,7 @@
 
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (checkArgs, checkExtension, verifyNotNull) where
+module Validation (checkArgs, validateExtension, validateContent) where
 
 import qualified Data.Text as T
 import Control.Monad.Except (MonadError(throwError), ExceptT)
@@ -18,16 +18,16 @@ checkArgs = do
         [arg] -> return arg
         _     -> throwError "Too many arguments! Provide only the name of a CSV containing dates."
 
-checkExtension :: FilePath -> ExceptT String IO ()
-checkExtension path
+validateExtension :: FilePath -> ExceptT String IO ()
+validateExtension path
     | isSupportedExt = return ()
     | otherwise      = throwError $ "Invalid file extension: " ++ ext
     where
         ext = map toLower $ takeExtension path
         isSupportedExt = ext == ".csv"
 
-verifyNotNull :: T.Text -> ExceptT String IO ()
-verifyNotNull text = do
+validateContent :: T.Text -> ExceptT String IO ()
+validateContent text = do
     case T.null text of
         True  -> throwError "The file was empty."
         False -> return ()
