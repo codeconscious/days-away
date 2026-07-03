@@ -1,8 +1,9 @@
 
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (checkArgs, checkExtension) where
+module Validation (checkArgs, checkExtension, verifyNotNull) where
 
+import qualified Data.Text as T
 import Control.Monad.Except (MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Char (toLower)
@@ -24,3 +25,9 @@ checkExtension path
     where
         ext = map toLower $ takeExtension path
         isSupportedExt = ext == ".csv"
+
+verifyNotNull :: T.Text -> ExceptT String IO ()
+verifyNotNull text = do
+    case T.null text of
+        True  -> throwError "The file was empty."
+        False -> return ()
