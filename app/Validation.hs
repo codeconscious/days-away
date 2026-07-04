@@ -1,7 +1,7 @@
 
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (checkArgs, validateExtension, validateContent) where
+module Validation (checkArgs, validateExtension, validateContent, validateLines) where
 
 import qualified Data.Text as T
 import Control.Monad.Except (MonadError(throwError), ExceptT)
@@ -30,4 +30,10 @@ validateContent :: T.Text -> Either String ()
 validateContent text =
     case T.null text of
         True  -> throwError "The file was empty."
+        False -> return ()
+
+validateLines :: [T.Text] -> Either String ()
+validateLines lines_ =
+    case null lines_ of
+        True  -> throwError "The file has text, but no data lines were found."
         False -> return ()

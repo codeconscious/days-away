@@ -5,7 +5,7 @@ module Main (main) where
 
 import Types (RowSummary(..))
 import IO (readSmallFile)
-import Validation (checkArgs, validateExtension, validateContent)
+import Validation (checkArgs, validateExtension, validateContent, validateLines)
 import qualified Data.Text as T
 import Control.Monad (unless)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
@@ -27,8 +27,9 @@ main =
             validateExtension fileName & liftEither
             content <- readSmallFile fileName
             validateContent content & liftEither
-            let lines_    = T.lines content
-                lineCount = show $ length lines_
+            let lines_ = T.lines content & ignoreInvalidLines
+            validateLines lines_ & liftEither
+            let lineCount = show $ length lines_
                 charCount = show $ T.length content
                 results   = traverse (runExceptT . parseLine) lines_
             liftIO $ do
@@ -36,6 +37,10 @@ main =
                 (errors, summaries) <- partitionEithers <$> results
                 printSummaries summaries
                 printErrors errors
+
+ignoreInvalidLines :: [T.Text] -> [T.Text]
+ignoreInvalidLines =
+    filter (\line -> line /= T.empty && T.head line /= '#')
 
 parseLine :: T.Text -> ExceptT String IO RowSummary
 parseLine text = do
