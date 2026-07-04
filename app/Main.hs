@@ -52,7 +52,7 @@ parseLine text = do
                 Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack d ++ "\" in line \
                                           \with category " ++ show (T.unpack c) ++ " \
                                           \and summary " ++ show (T.unpack s) ++ ": `" ++ err ++ "`."
-                Right day -> return $ RowSummary (T.unpack c) (T.unpack $ T.strip s) day (diffDays now day)
+                Right day -> return $ RowSummary c (T.strip s) day (diffDays now day)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
     where
         separator = T.pack ","
