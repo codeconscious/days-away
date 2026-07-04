@@ -17,6 +17,7 @@ import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
 import Control.Monad.Error.Class (liftEither)
 import Data.Function ((&))
+import Lib (formatCommas)
 
 main :: IO ()
 main =
@@ -56,6 +57,36 @@ parseLine text = do
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
     where
         separator = T.pack ","
+
+
+categoryMax :: Int
+categoryMax = 20
+
+summaryMax :: Int
+summaryMax = 40
+
+dateMax :: Int
+dateMax = 12
+
+daysAwayMax :: Int
+daysAwayMax = 15
+
+data ColumnLengths = ColumnLengths {
+    categoryLength :: Int
+  , summaryLength  :: Int
+  , dateLength     :: Int
+  , daysAwayLength :: Int
+}
+
+computeColumnLengths :: [RowSummary] -> ColumnLengths
+computeColumnLengths summaries =
+    ColumnLengths c s d da
+      where
+        process fieldMax processor = max fieldMax (maximum $ fmap processor summaries)
+        c  = process categoryMax (T.length . category)
+        s  = process summaryMax (T.length . summary)
+        d  = process dateMax (length . show . date)
+        da = process daysAwayMax (T.length . formatCommas . daysAway)
 
 printSummaries :: [RowSummary] -> IO ()
 printSummaries summaries = do
