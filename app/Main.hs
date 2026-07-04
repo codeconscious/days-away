@@ -64,7 +64,7 @@ printSummaries summaries = do
 printErrors :: [String] -> IO ()
 printErrors errs = do
     unless (null errs) $ do
-        putStrLn $ "There were " ++ show (length errs) ++ " parse error(s)."
+        putStrLn $ "There were " ++ show (length errs) ++ " parse error(s):"
         mapM_ putStrLn errs
 
 -- mapWithIndex :: (Int -> a -> b) -> [a] -> [b]

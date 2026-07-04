@@ -1,7 +1,7 @@
 module Types (RowSummary(..)) where
 
 import qualified Data.Text as T
-import Lib(formatCommas)
+import Lib (formatCommas)
 import Data.Time (Day)
 
 data RowSummary = RowSummary {
@@ -13,7 +13,8 @@ data RowSummary = RowSummary {
 
 instance Show RowSummary where
     show (RowSummary c s d da) =
-        T.unpack (T.justifyLeft 20 ' ' c) ++
-        T.unpack (T.justifyLeft 40 ' ' s) ++
-        show d ++
-        T.unpack (T.justifyRight 15 ' ' (formatCommas da))
+        let filler = ' ' in
+        T.unpack (T.justifyLeft  20 filler c) ++
+        T.unpack (T.justifyLeft  40 filler s) ++
+        T.unpack (T.justifyLeft  12 filler (T.pack $ show d)) ++
+        T.unpack (T.justifyRight 15 filler (formatCommas da))
