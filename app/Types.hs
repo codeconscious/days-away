@@ -1,4 +1,4 @@
-module Types (RowSummary(..)) where
+module Types (RowSummary(..), ColumnLengths(..)) where
 
 import qualified Data.Text as T
 import Lib (formatCommas)
@@ -20,3 +20,22 @@ instance Show RowSummary where
             , T.justifyLeft  12 filler (T.pack $ show d)
             , T.justifyRight 15 filler (formatCommas da)
             ]
+
+categoryMax :: Int
+categoryMax = 20
+
+summaryMax :: Int
+summaryMax = 40
+
+dateMax :: Int
+dateMax = 12
+
+daysAwayMax :: Int
+daysAwayMax = 15
+
+data ColumnLengths = ColumnLengths {
+    categoryLength :: Int
+  , summaryLength  :: Int
+  , dateLength     :: Int
+  , daysAwayLength :: Int
+}

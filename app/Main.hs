@@ -3,7 +3,7 @@
 
 module Main (main) where
 
-import Types (RowSummary(..))
+import Types (RowSummary(..), ColumnLengths(..))
 import IO (readSmallFile)
 import Validation (checkArgs, validateExtension, validateContent, validateLines)
 import qualified Data.Text as T
@@ -58,35 +58,16 @@ parseLine text = do
     where
         separator = T.pack ","
 
-
-categoryMax :: Int
-categoryMax = 20
-
-summaryMax :: Int
-summaryMax = 40
-
-dateMax :: Int
-dateMax = 12
-
-daysAwayMax :: Int
-daysAwayMax = 15
-
-data ColumnLengths = ColumnLengths {
-    categoryLength :: Int
-  , summaryLength  :: Int
-  , dateLength     :: Int
-  , daysAwayLength :: Int
-}
-
-computeColumnLengths :: [RowSummary] -> ColumnLengths
-computeColumnLengths summaries =
+computeColumnLengths :: ColumnLengths -> [RowSummary] -> ColumnLengths
+computeColumnLengths maxLengths summaries =
     ColumnLengths c s d da
       where
+        (cMax, sMax, dMax, daMax) = (categoryLength maxLengths, summaryLength maxLengths, dateLength maxLengths, daysAwayLength maxLengths)
         process fieldMax processor = max fieldMax (maximum $ fmap processor summaries)
-        c  = process categoryMax (T.length . category)
-        s  = process summaryMax (T.length . summary)
-        d  = process dateMax (length . show . date)
-        da = process daysAwayMax (T.length . formatCommas . daysAway)
+        c  = process cMax  (T.length . category)
+        s  = process sMax  (T.length . summary)
+        d  = process dMax  (length . show . date)
+        da = process daMax (T.length . formatCommas . daysAway)
 
 printSummaries :: [RowSummary] -> IO ()
 printSummaries summaries = do
