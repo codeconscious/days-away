@@ -18,7 +18,7 @@ checkArgs = do
         [arg] -> return arg
         _     -> throwError "Too many arguments! Provide only the name of a CSV containing dates."
 
-validateExtension :: FilePath -> ExceptT String IO ()
+validateExtension :: FilePath -> Either String ()
 validateExtension path
     | isSupportedExt = return ()
     | otherwise      = throwError $ "Invalid file extension: " ++ ext
@@ -26,8 +26,8 @@ validateExtension path
         ext = map toLower $ takeExtension path
         isSupportedExt = ext == ".csv"
 
-validateContent :: T.Text -> ExceptT String IO ()
-validateContent text = do
+validateContent :: T.Text -> Either String ()
+validateContent text =
     case T.null text of
         True  -> throwError "The file was empty."
         False -> return ()

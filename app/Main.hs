@@ -15,6 +15,8 @@ import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
+import Control.Monad.Error.Class (liftEither)
+import Data.Function ((&))
 
 main :: IO ()
 main =
@@ -22,9 +24,9 @@ main =
     where
         computation :: ExceptT String IO () = do
             fileName <- checkArgs
-            validateExtension fileName
+            validateExtension fileName & liftEither
             content <- readSmallFile fileName
-            validateContent content
+            validateContent content & liftEither
             let lines_    = T.lines content
                 lineCount = show $ length lines_
                 charCount = show $ T.length content
