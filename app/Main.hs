@@ -19,6 +19,9 @@ import Control.Monad.Error.Class (liftEither)
 import Data.Function ((&))
 import Lib (formatCommas)
 
+columnPadding :: Int
+columnPadding = 3
+
 main :: IO ()
 main =
     runExceptT computation >>= either putStrLn return
@@ -63,17 +66,16 @@ computeColumnWidths :: [RowSummary] -> ColumnWidths
 computeColumnWidths summaries =
     ColumnWidths c s d da
       where
-        padding = 3
-        process processor = (+ padding) $ maximum $ fmap processor summaries
-        c  = process (T.length . category)
-        s  = process (T.length . summary)
-        d  = process (length . show . date)
-        da = process (T.length . formatCommas . daysAway)
+        findMax finder = (+ columnPadding) $ maximum $ fmap finder summaries
+        c  = findMax (T.length . category)
+        s  = findMax (T.length . summary)
+        d  = findMax (  length . show . date)
+        da = findMax (T.length . formatCommas . daysAway)
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
     -- mapM_ print $ sortBy (comparing category) summaries
-    mapM_ (putStrLn . renderRow colWidths) $ sortBy (comparing category) summaries
+    mapM_ (putStrLn . showWithColumns colWidths) $ sortBy (comparing category) summaries
 
 printErrors :: [String] -> IO ()
 printErrors errs = do

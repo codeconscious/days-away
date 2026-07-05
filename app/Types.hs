@@ -1,4 +1,4 @@
-module Types (RowSummary(..), ColumnWidths(..), showWithColumns, renderRow) where
+module Types (RowSummary(..), ColumnWidths(..), showWithColumns) where
 
 import qualified Data.Text as T
 import Lib (formatCommas)
@@ -11,16 +11,6 @@ data RowSummary = RowSummary {
     , daysAway :: Integer
 }
 
-instance Show RowSummary where
-    show (RowSummary c s d da) =
-        let filler = ' ' in
-        T.unpack $ T.concat
-            [ T.justifyLeft  20 filler c
-            , T.justifyLeft  40 filler s
-            , T.justifyLeft  12 filler (T.pack $ show d)
-            , T.justifyRight 15 filler (formatCommas da)
-            ]
-
 data ColumnWidths = ColumnWidths {
     categoryWidth :: Int
   , summaryWidth  :: Int
@@ -28,21 +18,13 @@ data ColumnWidths = ColumnWidths {
   , daysAwayWidth :: Int
 }
 
-class RenderableRow a where
-    renderRow :: ColumnWidths -> a -> String
-
--------------------
-
 showWithColumns :: ColumnWidths -> RowSummary -> String
-showWithColumns (ColumnWidths catLen sumLen dateLen daysLen)
+showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
                 (RowSummary c s d da) =
     let filler = ' ' in
     T.unpack $ T.concat
-        [ T.justifyLeft  catLen  filler c
-        , T.justifyLeft  sumLen  filler s
-        , T.justifyLeft  dateLen filler (T.pack $ show d)
-        , T.justifyRight daysLen filler (formatCommas da)
+        [ T.justifyLeft  cWidth  filler c
+        , T.justifyLeft  sWidth  filler s
+        , T.justifyLeft  dWidth  filler (T.pack $ show d)
+        , T.justifyRight daWidth filler (formatCommas da)
         ]
-
-instance RenderableRow RowSummary where
-    renderRow cols row = showWithColumns cols row
