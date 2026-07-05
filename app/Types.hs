@@ -21,18 +21,6 @@ instance Show RowSummary where
             , T.justifyRight 15 filler (formatCommas da)
             ]
 
-categoryMax :: Int
-categoryMax = 20
-
-summaryMax :: Int
-summaryMax = 40
-
-dateMax :: Int
-dateMax = 12
-
-daysAwayMax :: Int
-daysAwayMax = 15
-
 data ColumnWidths = ColumnWidths {
     categoryWidth :: Int
   , summaryWidth  :: Int

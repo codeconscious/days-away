@@ -36,7 +36,7 @@ main =
             liftIO $ do
                 putStrLn $ "This file has " ++ lineCount ++ " line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
-                let columnWidths = computeColumnWidths maxColumnWidths summaries
+                let columnWidths = computeColumnWidths summaries
                 printSummaries columnWidths summaries
                 printErrors errors
 
@@ -59,20 +59,16 @@ parseLine text = do
     where
         separator = T.pack ","
 
-maxColumnWidths :: ColumnWidths
-maxColumnWidths = ColumnWidths 0 40 0 0
-
-computeColumnWidths :: ColumnWidths -> [RowSummary] -> ColumnWidths
-computeColumnWidths maxWidths summaries =
+computeColumnWidths :: [RowSummary] -> ColumnWidths
+computeColumnWidths summaries =
     ColumnWidths c s d da
       where
         padding = 3
-        (cMax, sMax, dMax, daMax) = (categoryWidth maxWidths, summaryWidth maxWidths, dateWidth maxWidths, daysAwayWidth maxWidths)
-        process fieldMax processor = (+ padding) $ max fieldMax (maximum $ fmap processor summaries)
-        c  = process cMax  (T.length . category)
-        s  = process sMax  (T.length . summary)
-        d  = process dMax  (length . show . date)
-        da = process daMax (T.length . formatCommas . daysAway)
+        process processor = (+ padding) $ maximum $ fmap processor summaries
+        c  = process (T.length . category)
+        s  = process (T.length . summary)
+        d  = process (length . show . date)
+        da = process (T.length . formatCommas . daysAway)
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
