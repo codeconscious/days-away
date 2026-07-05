@@ -37,7 +37,7 @@ main =
                 charCount = show $ T.length content
                 results   = traverse (runExceptT . parseLine) lines_
             liftIO $ do
-                putStrLn $ "This file has " ++ lineCount ++ " line(s) and " ++ charCount ++ " character(s)."
+                putStrLn $ "This file has " ++ lineCount ++ " data line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
                 let columnWidths = computeColumnWidths summaries
                 printSummaries columnWidths summaries
@@ -54,9 +54,9 @@ parseLine text = do
         [c, s, d] ->
             let dayParseResult = readEither $ T.unpack d :: Either String Day in
             case dayParseResult of
-                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack d ++ "\" in line \
-                                          \with category " ++ show (T.unpack c) ++ " \
-                                          \and summary " ++ show (T.unpack s) ++ ": `" ++ err ++ "`."
+                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack (T.strip d) ++ "\" in line \
+                                          \with category " ++ show (T.unpack $ T.strip c) ++ " \
+                                          \and summary " ++ show (T.unpack $ T.strip s) ++ ": `" ++ err ++ "`."
                 Right day -> return $ RowSummary c (T.strip s) day (diffDays now day)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
     where

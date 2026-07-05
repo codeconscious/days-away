@@ -30,6 +30,6 @@ This file has 4 line(s) and 216 character(s).
 Test   Super Nintendo release date in U.S.   1991-08-23      21,537
 Test   Future date                           2040-05-01      -5,940
 There were 2 parse error(s):
-* Error parsing date " 2040-A-01" in line with category "Test" and summary " Invalid data": `Prelude.read: no parse`.
+* Error parsing date "2040-A-01" in line with category "Test" and summary "Invalid data": `Prelude.read: no parse`.
 * Error parsing malformed line: Test, Invalid data, 2040-A-01, Extra column!
 ```
