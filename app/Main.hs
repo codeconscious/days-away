@@ -57,11 +57,12 @@ parseLine text = do
                 Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack (T.strip d) ++ "\" in line \
                                           \with category " ++ show (T.unpack $ T.strip c) ++ " \
                                           \and summary " ++ show (T.unpack $ T.strip s) ++ ": `" ++ err ++ "`."
-                Right day -> return $ RowSummary c (T.strip s) day (diffDays now day)
+                Right day -> return $ RowSummary (T.strip c) (T.strip s) day (diffDays now day)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
     where
         separator = T.pack ","
 
+-- Returns the column widths necessary to display all summary text, including padding spaces.
 computeColumnWidths :: [RowSummary] -> ColumnWidths
 computeColumnWidths summaries =
     ColumnWidths c s d da
@@ -74,7 +75,6 @@ computeColumnWidths summaries =
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
-    -- mapM_ print $ sortBy (comparing category) summaries
     mapM_ (putStrLn . showWithColumns colWidths) $ sortBy (comparing category) summaries
 
 printErrors :: [String] -> IO ()
