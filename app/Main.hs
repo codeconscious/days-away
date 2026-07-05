@@ -3,7 +3,7 @@
 
 module Main (main) where
 
-import Types (RowSummary(..), ColumnLengths(..))
+import Types --
 import IO (readSmallFile)
 import Validation (checkArgs, validateExtension, validateContent, validateLines)
 import qualified Data.Text as T
@@ -36,7 +36,8 @@ main =
             liftIO $ do
                 putStrLn $ "This file has " ++ lineCount ++ " line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
-                printSummaries summaries
+                let columnWidths = computeColumnWidths maxColumnWidths summaries
+                printSummaries columnWidths summaries
                 printErrors errors
 
 ignoreInvalidLines :: [T.Text] -> [T.Text]
@@ -58,20 +59,24 @@ parseLine text = do
     where
         separator = T.pack ","
 
-computeColumnLengths :: ColumnLengths -> [RowSummary] -> ColumnLengths
-computeColumnLengths maxLengths summaries =
-    ColumnLengths c s d da
+maxColumnWidths :: ColumnWidths
+maxColumnWidths = ColumnWidths 20 40 12 15
+
+computeColumnWidths :: ColumnWidths -> [RowSummary] -> ColumnWidths
+computeColumnWidths maxWidths summaries =
+    ColumnWidths c s d da
       where
-        (cMax, sMax, dMax, daMax) = (categoryLength maxLengths, summaryLength maxLengths, dateLength maxLengths, daysAwayLength maxLengths)
+        (cMax, sMax, dMax, daMax) = (categoryWidth maxWidths, summaryWidth maxWidths, dateWidth maxWidths, daysAwayWidth maxWidths)
         process fieldMax processor = max fieldMax (maximum $ fmap processor summaries)
         c  = process cMax  (T.length . category)
         s  = process sMax  (T.length . summary)
         d  = process dMax  (length . show . date)
         da = process daMax (T.length . formatCommas . daysAway)
 
-printSummaries :: [RowSummary] -> IO ()
-printSummaries summaries = do
-    mapM_ print $ sortBy (comparing category) summaries
+printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
+printSummaries colWidths summaries = do
+    -- mapM_ print $ sortBy (comparing category) summaries
+    mapM_ (print . renderRow colWidths) $ sortBy (comparing category) summaries
 
 printErrors :: [String] -> IO ()
 printErrors errs = do
