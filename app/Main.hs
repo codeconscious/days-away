@@ -60,14 +60,15 @@ parseLine text = do
         separator = T.pack ","
 
 maxColumnWidths :: ColumnWidths
-maxColumnWidths = ColumnWidths 20 40 12 15
+maxColumnWidths = ColumnWidths 0 40 0 0
 
 computeColumnWidths :: ColumnWidths -> [RowSummary] -> ColumnWidths
 computeColumnWidths maxWidths summaries =
     ColumnWidths c s d da
       where
+        padding = 3
         (cMax, sMax, dMax, daMax) = (categoryWidth maxWidths, summaryWidth maxWidths, dateWidth maxWidths, daysAwayWidth maxWidths)
-        process fieldMax processor = max fieldMax (maximum $ fmap processor summaries)
+        process fieldMax processor = (+ padding) $ max fieldMax (maximum $ fmap processor summaries)
         c  = process cMax  (T.length . category)
         s  = process sMax  (T.length . summary)
         d  = process dMax  (length . show . date)
@@ -76,7 +77,7 @@ computeColumnWidths maxWidths summaries =
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
     -- mapM_ print $ sortBy (comparing category) summaries
-    mapM_ (print . renderRow colWidths) $ sortBy (comparing category) summaries
+    mapM_ (putStrLn . renderRow colWidths) $ sortBy (comparing category) summaries
 
 printErrors :: [String] -> IO ()
 printErrors errs = do
