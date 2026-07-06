@@ -22,6 +22,9 @@ import Lib (formatCommas)
 columnPadding :: Int
 columnPadding = 3
 
+fieldSeparator :: String
+fieldSeparator = ","
+
 main :: IO ()
 main =
     runExceptT computation >>= either putStrLn return
@@ -35,7 +38,7 @@ main =
             validateLines lines_ & liftEither
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                results   = traverse (runExceptT . parseLine) lines_
+                results   = traverse (runExceptT . parseLine fieldSeparator) lines_
             liftIO $ do
                 putStrLn $ "This file has " ++ lineCount ++ " data line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
@@ -44,13 +47,12 @@ main =
                 printErrors errors
 
 ignoreInvalidLines :: [T.Text] -> [T.Text]
-ignoreInvalidLines =
-    filter (\line -> line /= T.empty && T.head line /= '#')
+ignoreInvalidLines = filter (\line -> line /= T.empty && T.head line /= '#')
 
-parseLine :: T.Text -> ExceptT String IO RowSummary
-parseLine text = do
+parseLine :: String -> T.Text -> ExceptT String IO RowSummary
+parseLine separator text = do
     now <- liftIO $ utctDay <$> getCurrentTime
-    case T.splitOn separator text of
+    case T.splitOn (T.pack separator) text of
         [c, s, d] ->
             let dayParseResult = readEither $ T.unpack d :: Either String Day in
             case dayParseResult of
@@ -59,8 +61,6 @@ parseLine text = do
                                           \and summary " ++ show (T.unpack $ T.strip s) ++ ": `" ++ err ++ "`."
                 Right day -> return $ RowSummary (T.strip c) (T.strip s) day (diffDays now day)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
-    where
-        separator = T.pack ","
 
 -- Returns the column widths necessary to display all summary text, including padding spaces.
 computeColumnWidths :: [RowSummary] -> ColumnWidths
