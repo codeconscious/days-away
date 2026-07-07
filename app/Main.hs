@@ -54,7 +54,7 @@ parseLine separator text = do
     now <- liftIO $ utctDay <$> getCurrentTime
     case T.splitOn (T.pack separator) text of
         [c, s, d] ->
-            let dayParseResult = readEither $ T.unpack d :: Either String Day in
+            let dayParseResult = readEither $ T.unpack (T.strip d) :: Either String Day in
             case dayParseResult of
                 Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack (T.strip d) ++ "\" in line \
                                           \with category " ++ show (T.unpack $ T.strip c) ++ " \
