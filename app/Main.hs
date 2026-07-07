@@ -19,11 +19,11 @@ import Control.Monad.Error.Class (liftEither)
 import Data.Function ((&))
 import Lib (formatCommas)
 
-columnPadding :: Int
-columnPadding = 3
+columnPaddingSpaces :: Int
+columnPaddingSpaces = 3
 
-fieldSeparator :: String
-fieldSeparator = ","
+csvSeparator :: String
+csvSeparator = ","
 
 main :: IO ()
 main =
@@ -38,11 +38,11 @@ main =
             validateLines lines_ & liftEither
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                results   = traverse (runExceptT . parseLine fieldSeparator) lines_
+                results   = traverse (runExceptT . parseLine csvSeparator) lines_
             liftIO $ do
                 putStrLn $ "This file has " ++ lineCount ++ " data line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
-                let columnWidths = computeColumnWidths summaries
+                let columnWidths = computeColumnWidths columnPaddingSpaces summaries
                 printSummaries columnWidths summaries
                 printErrors errors
 
@@ -62,16 +62,16 @@ parseLine separator text = do
                 Right day -> return $ RowSummary (T.strip c) (T.strip s) day (diffDays now day)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
 
--- Returns the column widths necessary to display all summary text, including padding spaces.
-computeColumnWidths :: [RowSummary] -> ColumnWidths
-computeColumnWidths summaries =
+-- Returns the column widths necessary to display all summary text. Including padding spaces.
+computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
+computeColumnWidths padding summaries =
     ColumnWidths c s d da
       where
-        findMax finder = (+ columnPadding) $ maximum $ fmap finder summaries
-        c  = findMax (T.length . category)
-        s  = findMax (T.length . summary)
-        d  = findMax (  length . show . date)
-        da = findMax (T.length . formatCommas . daysAway)
+        findWidestInColumn finder = (+ padding) $ maximum $ finder <$> summaries
+        c  = findWidestInColumn (T.length . category)
+        s  = findWidestInColumn (T.length . summary)
+        d  = findWidestInColumn (  length . show . date)
+        da = findWidestInColumn (T.length . formatCommas . daysAway)
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
