@@ -56,9 +56,9 @@ parseLine today separator line = do
         [c, s, d] ->
             let (c', s', d') = (T.strip c, T.strip s, T.strip d) in
             case readEither $ T.unpack d' :: Either String Day of
-                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack d' ++ "\" in line \
-                                          \with category " ++ show (T.unpack c') ++ " \
-                                          \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
+                Left err -> throwError $ "* Error parsing date \"" ++ T.unpack d' ++ "\" in line \
+                                         \with category " ++ show (T.unpack c') ++ " \
+                                         \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
                 Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
 
