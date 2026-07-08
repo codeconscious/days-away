@@ -41,7 +41,7 @@ main =
                 charCount = show $ T.length content
                 results   = mapM (runExceptT . parseLine today csvSeparator) lines_
             liftIO $ do
-                putStrLn $ "This file has " ++ lineCount ++ " data line(s) and " ++ charCount ++ " character(s)."
+                putStrLn $ "This file has " ++ charCount ++ " total character(s) and " ++ lineCount ++ " data line(s)."
                 (errors, summaries) <- partitionEithers <$> results
                 let columnWidths = computeColumnWidths columnPaddingSpaces summaries
                 printSummaries columnWidths summaries
