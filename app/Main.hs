@@ -51,16 +51,16 @@ ignoreInvalidLines :: [T.Text] -> [T.Text]
 ignoreInvalidLines = filter (\line -> line /= T.empty && T.head line /= '#')
 
 parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
-parseLine today separator text = do
-    case T.splitOn (T.pack separator) text of
+parseLine today separator line = do
+    case T.splitOn (T.pack separator) line of
         [c, s, d] ->
-            let dayParseResult = readEither $ T.unpack (T.strip d) :: Either String Day in
-            case dayParseResult of
-                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack (T.strip d) ++ "\" in line \
-                                          \with category " ++ show (T.unpack $ T.strip c) ++ " \
-                                          \and summary " ++ show (T.unpack $ T.strip s) ++ ": `" ++ err ++ "`."
-                Right parsedDay -> return $ RowSummary (T.strip c) (T.strip s) parsedDay (diffDays today parsedDay)
-        _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
+            let (c', s', d') = (T.strip c, T.strip s, T.strip d) in
+            case readEither $ T.unpack d' :: Either String Day of
+                Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack d' ++ "\" in line \
+                                          \with category " ++ show (T.unpack c') ++ " \
+                                          \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
+                Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
+        _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
 
 -- Returns the column widths necessary to display all summary text. Including padding spaces.
 computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
