@@ -31,11 +31,11 @@ main =
     where
         computation :: ExceptT String IO () = do
             fileName <- checkArgs
-            validateExtension fileName & liftEither
+            liftEither $ validateExtension fileName
             content <- readSmallFile fileName
-            validateContent content & liftEither
+            liftEither $ validateContent content
             let lines_ = T.lines content & ignoreInvalidLines
-            validateLines lines_ & liftEither
+            liftEither $ validateLines lines_
             today <- liftIO $ utctDay <$> getCurrentTime
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
