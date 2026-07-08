@@ -36,9 +36,10 @@ main =
             validateContent content & liftEither
             let lines_ = T.lines content & ignoreInvalidLines
             validateLines lines_ & liftEither
+            today <- liftIO $ utctDay <$> getCurrentTime
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                results   = traverse (runExceptT . parseLine csvSeparator) lines_
+                results   = traverse (runExceptT . parseLine today csvSeparator) lines_
             liftIO $ do
                 putStrLn $ "This file has " ++ lineCount ++ " data line(s) and " ++ charCount ++ " character(s)."
                 (errors, summaries) <- partitionEithers <$> results
@@ -49,9 +50,8 @@ main =
 ignoreInvalidLines :: [T.Text] -> [T.Text]
 ignoreInvalidLines = filter (\line -> line /= T.empty && T.head line /= '#')
 
-parseLine :: String -> T.Text -> ExceptT String IO RowSummary
-parseLine separator text = do
-    now <- liftIO $ utctDay <$> getCurrentTime
+parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
+parseLine today separator text = do
     case T.splitOn (T.pack separator) text of
         [c, s, d] ->
             let dayParseResult = readEither $ T.unpack (T.strip d) :: Either String Day in
@@ -59,7 +59,7 @@ parseLine separator text = do
                 Left err  -> throwError $ "* Error parsing date \"" ++ T.unpack (T.strip d) ++ "\" in line \
                                           \with category " ++ show (T.unpack $ T.strip c) ++ " \
                                           \and summary " ++ show (T.unpack $ T.strip s) ++ ": `" ++ err ++ "`."
-                Right day -> return $ RowSummary (T.strip c) (T.strip s) day (diffDays now day)
+                Right parsedDay -> return $ RowSummary (T.strip c) (T.strip s) parsedDay (diffDays today parsedDay)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack text
 
 -- Returns the column widths necessary to display all summary text. Including padding spaces.
