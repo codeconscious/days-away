@@ -1,11 +1,13 @@
 # days-away
 
-A small command line application that lists how many days away dates in a CSV file are from today. This is a small Haskell practice project.
+A simply command line application that lists how many days away dates in a CSV file are from today. This is a small Haskell practice project.
 
 ## Requirements
 
 - Haskell
-- A CSV file in which each line contains a category, summary, and date in YYYY-MM-DD format (with no headers)
+- A CSV file in which each line contains a category, summary, and date in YYYY-MM-DD format
+  - No headers must be included
+  - Data elements themselves must not contain additional commas
 
 Sample CSV input:
 
