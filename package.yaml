@@ -35,10 +35,10 @@ ghc-options:
 library:
   source-dirs: src
   dependencies:
-  - text
-  - mtl
-  - time
   - filepath
+  - mtl
+  - text
+  - time
   exposed-modules:
     - Lib
     - Types
@@ -58,10 +58,10 @@ executables:
     - -Wno-unused-top-binds
     dependencies:
     - days-away
-    - text
-    - mtl
-    - time
     - filepath
+    - mtl
+    - text
+    - time
 
 tests:
   days-away-test:
