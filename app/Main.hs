@@ -3,9 +3,8 @@
 
 module Main (main) where
 
-import Types --
+import Lib
 import IO (readSmallFile)
-import Validation (checkArgs, validateExtension, validateContent, validateLines)
 import qualified Data.Text as T
 import Control.Monad (unless)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
@@ -17,7 +16,6 @@ import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
 import Control.Monad.Error.Class (liftEither)
 import Data.Function ((&))
-import Lib (formatCommas)
 
 columnPaddingSpaces :: Int
 columnPaddingSpaces = 3
@@ -61,17 +59,6 @@ parseLine today separator line = do
                                          \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
                 Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
-
--- Returns the column widths necessary to display all summary text. Including padding spaces.
-computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
-computeColumnWidths padding summaries =
-    ColumnWidths c s d da
-      where
-        findWidestInColumn finder = (+ padding) $ maximum $ finder <$> summaries
-        c  = findWidestInColumn (T.length . category)
-        s  = findWidestInColumn (T.length . summary)
-        d  = findWidestInColumn (  length . show . date)
-        da = findWidestInColumn (T.length . formatCommas . daysAway)
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do

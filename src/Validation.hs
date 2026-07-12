@@ -1,4 +1,3 @@
-
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
 module Validation (checkArgs, validateExtension, validateContent, validateLines) where

@@ -25,6 +25,8 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Types
+      Validation
   other-modules:
       Paths_days_away
   autogen-modules:
@@ -44,8 +46,6 @@ executable days-away-exe
   main-is: Main.hs
   other-modules:
       IO
-      Types
-      Validation
       Paths_days_away
   autogen-modules:
       Paths_days_away
@@ -68,13 +68,21 @@ test-suite days-away-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      ComputeColumnWidthsSpec
+      FormatCommasSpec
       Paths_days_away
   autogen-modules:
       Paths_days_away
   hs-source-dirs:
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      hspec-discover:hspec-discover
   build-depends:
       base >=4.7 && <5
     , days-away
+    , hspec
+    , hspec-discover
+    , text
+    , time
   default-language: Haskell2010

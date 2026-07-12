@@ -1,9 +1,15 @@
-module Lib (formatCommas) where
+module Lib
+  ( formatCommas
+  , checkArgs, validateExtension, validateContent, validateLines
+  , RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths
+  ) where
 
+import Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths)
+import Validation (checkArgs, validateExtension, validateContent, validateLines)
 import qualified Data.Text as T
 import Data.List (intercalate)
 
--- Format integer with comma-separated thousands.
+-- Format integer into comma-separated thousands.
 formatCommas :: Integer -> T.Text
 formatCommas n = T.pack $ sign ++ intercalate "," (reverse $ map reverse $ chunksOf 3 $ reverse $ show $ abs n)
   where

@@ -39,6 +39,10 @@ library:
   - mtl
   - time
   - filepath
+  exposed-modules:
+    - Lib
+    - Types
+    - Validation
 
 executables:
   days-away-exe:
@@ -67,5 +71,11 @@ tests:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    build-tools:
+      - hspec-discover
     dependencies:
     - days-away
+    - hspec
+    - hspec-discover:hspec-discover
+    - text
+    - time
