@@ -49,7 +49,9 @@ ignoreInvalidLines :: [T.Text] -> [T.Text]
 ignoreInvalidLines = filter isDataLine
   where
     commentMarker = '#'
-    isDataLine line = case T.uncons line of Just (fstChar, _) -> fstChar /= commentMarker; _ -> False
+    isDataLine line = case T.uncons line of
+                      Just (hd, _) -> hd /= commentMarker
+                      _            -> False
 
 parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
 parseLine today separator line = do
