@@ -10,7 +10,6 @@ import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
-import Data.Function ((&))
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
 import qualified Data.Text as T
@@ -30,7 +29,7 @@ main =
                        >>= liftEither . validateExtension
                        >>= readSmallFile
                        >>= liftEither . validateContent
-            let lines_ = T.lines content & ignoreInvalidLines
+            let lines_ = dropInvalidLines $ T.lines content
             liftEither $ validateLines lines_
             today <- liftIO $ utctDay <$> getCurrentTime
             let lineCount = show $ length lines_
@@ -43,8 +42,8 @@ main =
                 printSummaries columnWidths summaries
                 printErrors errors
 
-ignoreInvalidLines :: [T.Text] -> [T.Text]
-ignoreInvalidLines = filter isDataLine
+dropInvalidLines :: [T.Text] -> [T.Text]
+dropInvalidLines = filter isDataLine
   where
     commentMarker = '#'
     isDataLine line = case T.uncons line of
