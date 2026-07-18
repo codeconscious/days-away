@@ -1,11 +1,5 @@
-module Lib
-  ( formatCommas
-  , checkArgs, validateExtension, validateContent, validateLines
-  , RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths
-  ) where
+module Lib (formatCommas) where
 
-import Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths)
-import Validation (checkArgs, validateExtension, validateContent, validateLines)
 import qualified Data.Text as T
 import Data.List (intercalate)
 

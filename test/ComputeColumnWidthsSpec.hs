@@ -1,7 +1,7 @@
 module ComputeColumnWidthsSpec (spec) where
 
 import Test.Hspec
-import Lib
+import Types
 import qualified Data.Text as T
 import Data.Time (fromGregorian)
 

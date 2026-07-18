@@ -3,7 +3,8 @@
 
 module Main (main) where
 
-import Lib
+import Types (computeColumnWidths, showWithColumns, ColumnWidths, RowSummary(category, RowSummary))
+import Validation (checkArgs, validateContent, validateExtension, validateLines)
 import IO (readSmallFile)
 import qualified Data.Text as T
 import Control.Monad (unless)
