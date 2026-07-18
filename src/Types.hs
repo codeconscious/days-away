@@ -1,8 +1,10 @@
-module Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths) where
+module Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths, parseLine) where
 
-import qualified Data.Text as T
-import Data.Time (Day)
+import Control.Monad.Except (MonadError(throwError), ExceptT)
 import Data.List (intercalate)
+import Data.Time (diffDays, Day)
+import Text.Read (readEither)
+import qualified Data.Text as T
 
 data RowSummary = RowSummary {
       category :: T.Text
@@ -10,6 +12,18 @@ data RowSummary = RowSummary {
     , date     :: Day
     , daysAway :: Integer
 }
+
+parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
+parseLine today separator line = do
+    case T.splitOn (T.pack separator) line of
+        [c, s, d] ->
+            let (c', s', d') = (T.strip c, T.strip s, T.strip d) in
+            case readEither $ T.unpack d' :: Either String Day of
+                Left err -> throwError $ "* Error parsing date \"" ++ T.unpack d' ++ "\" in line \
+                                         \with category " ++ show (T.unpack c') ++ " \
+                                         \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
+                Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
+        _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
 
 data ColumnWidths = ColumnWidths {
     categoryWidth :: Int
