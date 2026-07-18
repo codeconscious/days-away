@@ -13,9 +13,9 @@ validateArgs :: ExceptT String IO FilePath
 validateArgs = do
     args <- liftIO getArgs
     case args of
-        []    -> throwError "You must provide the name of a CSV as an argument."
+        []    -> throwError "You must provide the name of a properly-formatted CSV file as an argument."
         [arg] -> return arg
-        _     -> throwError "Too many arguments! Provide only the name of a CSV containing dates."
+        _     -> throwError "Too many arguments! Provide only the name of a properly-formatted CSV file."
 
 validateExtension :: FilePath -> Either String ()
 validateExtension path
