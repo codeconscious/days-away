@@ -1,7 +1,7 @@
 module Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths, parseLine) where
 
+import Lib (formatCommas)
 import Control.Monad.Except (MonadError(throwError), ExceptT)
-import Data.List (intercalate)
 import Data.Time (diffDays, Day)
 import Text.Read (readEither)
 import qualified Data.Text as T
@@ -11,6 +11,13 @@ data RowSummary = RowSummary {
     , summary  :: T.Text
     , date     :: Day
     , daysAway :: Integer
+}
+
+data ColumnWidths = ColumnWidths {
+    categoryWidth :: Int
+  , summaryWidth  :: Int
+  , dateWidth     :: Int
+  , daysAwayWidth :: Int
 }
 
 parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
@@ -25,13 +32,6 @@ parseLine today separator line = do
                 Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
 
-data ColumnWidths = ColumnWidths {
-    categoryWidth :: Int
-  , summaryWidth  :: Int
-  , dateWidth     :: Int
-  , daysAwayWidth :: Int
-}
-
 showWithColumns :: ColumnWidths -> RowSummary -> String
 showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
                 (RowSummary c s d da) =
@@ -42,14 +42,6 @@ showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
         , T.justifyLeft  dWidth  filler (T.pack $ show d)
         , T.justifyRight daWidth filler (formatCommas da)
         ]
-
--- Format integer with comma-separated thousands.
-formatCommas :: Integer -> T.Text
-formatCommas n = T.pack $ sign ++ intercalate "," (reverse $ map reverse $ chunksOf 3 $ reverse $ show $ abs n)
-  where
-    sign = if n < 0 then "-" else ""
-    chunksOf _ [] = []
-    chunksOf n' xs = take n' xs : chunksOf n' (drop n' xs)
 
 -- Returns the column widths necessary to display all summary text. Including padding spaces.
 computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
