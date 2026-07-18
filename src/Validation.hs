@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (checkArgs, validateExtension, validateContent, validateLines) where
+module Validation (validateArgs, validateExtension, validateContent, validateLines) where
 
 import qualified Data.Text as T
 import Control.Monad.Except (MonadError(throwError), ExceptT)
@@ -9,8 +9,8 @@ import Data.Char (toLower)
 import System.Environment (getArgs)
 import System.FilePath (takeExtension)
 
-checkArgs :: ExceptT String IO FilePath
-checkArgs = do
+validateArgs :: ExceptT String IO FilePath
+validateArgs = do
     args <- liftIO getArgs
     case args of
         []    -> throwError "You must provide the name of a CSV as an argument."

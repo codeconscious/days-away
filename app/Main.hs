@@ -4,7 +4,7 @@
 module Main (main) where
 
 import Types (computeColumnWidths, showWithColumns, ColumnWidths, RowSummary(category, RowSummary))
-import Validation (checkArgs, validateContent, validateExtension, validateLines)
+import Validation (validateArgs, validateContent, validateExtension, validateLines)
 import IO (readSmallFile)
 import qualified Data.Text as T
 import Control.Monad (unless)
@@ -29,7 +29,7 @@ main =
     runExceptT computation >>= either putStrLn return
     where
         computation :: ExceptT String IO () = do
-            fileName <- checkArgs
+            fileName <- validateArgs
             liftEither $ validateExtension fileName
             content <- readSmallFile fileName
             liftEither $ validateContent content
