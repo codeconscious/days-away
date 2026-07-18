@@ -3,20 +3,17 @@
 
 module Main (main) where
 
-import IO (readSmallFile)
-import Types (computeColumnWidths, showWithColumns, ColumnWidths, RowSummary(category, RowSummary))
+import IO (readSmallFile, printSummaries, printErrors)
+import Types (computeColumnWidths, RowSummary(RowSummary))
 import Validation (validateArgs, validateContent, validateExtension, validateLines)
-import qualified Data.Text as T
-import Control.Monad (unless)
 import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
 import Data.Function ((&))
-import Data.List (sortBy)
-import Data.Ord (comparing)
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
+import qualified Data.Text as T
 
 columnPaddingSpaces :: Int
 columnPaddingSpaces = 3
@@ -65,16 +62,6 @@ parseLine today separator line = do
                                          \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
                 Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
         _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
-
-printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
-printSummaries colWidths summaries = do
-    mapM_ (putStrLn . showWithColumns colWidths) $ sortBy (comparing category) summaries
-
-printErrors :: [String] -> IO ()
-printErrors errs = do
-    unless (null errs) $ do
-        putStrLn $ "There were " ++ show (length errs) ++ " parse error(s):"
-        mapM_ putStrLn errs
 
 -- mapWithIndex :: (Int -> a -> b) -> [a] -> [b]
 -- mapWithIndex f xs = [f i x | (i, x) <- zip [0..] xs]
