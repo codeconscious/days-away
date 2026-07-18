@@ -26,10 +26,10 @@ main =
     runExceptT computation >>= either putStrLn return
     where
         computation :: ExceptT String IO () = do
-            fileName <- validateArgs
-            liftEither $ validateExtension fileName
-            content <- readSmallFile fileName
-            liftEither $ validateContent content
+            content <- validateArgs
+                       >>= liftEither . validateExtension
+                       >>= readSmallFile
+                       >>= liftEither . validateContent
             let lines_ = T.lines content & ignoreInvalidLines
             liftEither $ validateLines lines_
             today <- liftIO $ utctDay <$> getCurrentTime
