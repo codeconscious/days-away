@@ -3,20 +3,20 @@
 
 module Main (main) where
 
+import IO (readSmallFile)
 import Types (computeColumnWidths, showWithColumns, ColumnWidths, RowSummary(category, RowSummary))
 import Validation (validateArgs, validateContent, validateExtension, validateLines)
-import IO (readSmallFile)
 import qualified Data.Text as T
 import Control.Monad (unless)
+import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (runExceptT, MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
+import Data.Function ((&))
 import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.Time (diffDays, getCurrentTime, Day, UTCTime(utctDay))
 import Text.Read (readEither)
-import Control.Monad.Error.Class (liftEither)
-import Data.Function ((&))
 
 columnPaddingSpaces :: Int
 columnPaddingSpaces = 3
