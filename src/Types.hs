@@ -43,7 +43,7 @@ showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
         , T.justifyRight daWidth filler (formatCommas da)
         ]
 
--- Returns the column widths necessary to display all summary text. Including padding spaces.
+-- Gives the minimum column widths necessary to accommodate display of all row data, including padding spaces.
 computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
 computeColumnWidths padding summaries =
     ColumnWidths c s d da
