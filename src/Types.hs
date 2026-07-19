@@ -1,7 +1,9 @@
 module Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths, parseLine) where
 
 import Lib (formatCommas)
+import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (MonadError(throwError), ExceptT)
+import Data.Bifunctor (Bifunctor(first))
 import Data.Time (diffDays, Day)
 import Text.Read (readEither)
 import qualified Data.Text as T
@@ -22,15 +24,25 @@ data ColumnWidths = ColumnWidths {
 
 parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
 parseLine today separator line = do
-    case T.splitOn (T.pack separator) line of
-        [c, s, d] ->
-            let (c', s', d') = (T.strip c, T.strip s, T.strip d) in
-            case readEither $ T.unpack d' :: Either String Day of
-                Left err -> throwError $ "* Error parsing date \"" ++ T.unpack d' ++ "\" in line \
-                                         \with category " ++ show (T.unpack c') ++ " \
-                                         \and summary " ++ show (T.unpack s') ++ ": `" ++ err ++ "`."
-                Right parsedDate -> return $ RowSummary c' s' parsedDate (diffDays today parsedDate)
-        _ -> throwError $ "* Error parsing malformed line: " ++ T.unpack line
+    let parts = map T.strip $ T.splitOn (T.pack separator) line
+
+    (c, s, d) <- case parts of
+        [c, s, d] -> pure (c, s, d)
+        _         -> throwError $ "* Error parsing malformed line: " <> T.unpack line
+
+    parsedDate <- liftEither . first (formatDateError c s d) $ readEither (T.unpack d)
+
+    return $ RowSummary c s parsedDate (diffDays today parsedDate)
+  where
+    formatDateError c s d err = unwords
+        [ "* Error parsing date"
+        , show (T.unpack d)
+        , "in line with category"
+        , show (T.unpack c)
+        , "and summary"
+        , show (T.unpack s) <> ":"
+        , "`" <> err <> "`."
+        ]
 
 showWithColumns :: ColumnWidths -> RowSummary -> String
 showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
