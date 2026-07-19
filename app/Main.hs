@@ -1,6 +1,3 @@
-{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
-{-# OPTIONS_GHC -fwarn-name-shadowing #-}
-
 module Main (main) where
 
 import IO (readSmallFile, printSummaries, printErrors)

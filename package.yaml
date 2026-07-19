@@ -27,10 +27,12 @@ ghc-options:
 - -Widentities
 - -Wincomplete-record-updates
 - -Wincomplete-uni-patterns
+- -Wincomplete-patterns
 - -Wmissing-export-lists
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
+- -Wshadow
 
 library:
   source-dirs: src
