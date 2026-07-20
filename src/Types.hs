@@ -22,12 +22,12 @@ data ColumnWidths = ColumnWidths {
   , daysAwayWidth :: Int
 }
 
-parseLine :: Day -> String -> T.Text -> ExceptT String IO RowSummary
+parseLine :: Day -> String -> T.Text -> Either String RowSummary
 parseLine today separator line = do
     let parts = map T.strip $ T.splitOn (T.pack separator) line
 
     (c, s, d) <- case parts of
-        [c, s, d] -> pure (c, s, d)
+        [c, s, d] -> return (c, s, d)
         _         -> throwError $ "* Error parsing malformed line: " <> T.unpack line
 
     parsedDate <- liftEither . first (formatDateError c s d) $ readEither (T.unpack d)

@@ -30,11 +30,10 @@ main =
             today <- liftIO $ utctDay <$> getCurrentTime
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                results   = mapM (runExceptT . parseLine today csvSeparator) lines_
+                (errors, summaries) = partitionEithers $ map (parseLine today csvSeparator) lines_
+                columnWidths = computeColumnWidths columnPaddingSpaces summaries
             liftIO $ do
                 putStrLn $ "This file has " ++ charCount ++ " total character(s) and " ++ lineCount ++ " data line(s)."
-                (errors, summaries) <- partitionEithers <$> results
-                let columnWidths = computeColumnWidths columnPaddingSpaces summaries
                 printSummaries columnWidths summaries
                 printErrors errors
 
