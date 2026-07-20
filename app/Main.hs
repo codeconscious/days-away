@@ -44,6 +44,3 @@ dropInvalidLines = filter isDataLine
     isDataLine line = case T.uncons line of
                       Just (hd, _) -> hd /= commentMarker
                       _            -> False
-
--- mapWithIndex :: (Int -> a -> b) -> [a] -> [b]
--- mapWithIndex f xs = [f i x | (i, x) <- zip [0..] xs]
