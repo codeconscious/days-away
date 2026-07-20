@@ -71,6 +71,7 @@ test-suite days-away-test
       ComputeColumnWidthsSpec
       FormatCommasSpec
       ParseLineSpec
+      ShowWithColumnsSpec
       Paths_days_away
   autogen-modules:
       Paths_days_away
