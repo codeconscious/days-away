@@ -55,7 +55,7 @@ showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
         , T.justifyRight daWidth filler (formatCommas da)
         ]
 
--- Gives the minimum column widths necessary to accommodate display of all row data, including padding spaces.
+-- |Gives the minimum column widths necessary to accommodate display of all row data, including padding spaces.
 computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
 computeColumnWidths padding summaries =
     ColumnWidths c s d da
