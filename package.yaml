@@ -33,6 +33,7 @@ ghc-options:
 - -Wpartial-fields
 - -Wredundant-constraints
 - -Wshadow
+- -Wwarn-tabs
 
 library:
   source-dirs: src
