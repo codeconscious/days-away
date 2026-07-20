@@ -2,7 +2,7 @@ module Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWi
 
 import Lib (formatCommas)
 import Control.Monad.Error.Class (liftEither)
-import Control.Monad.Except (MonadError(throwError), ExceptT)
+import Control.Monad.Except (MonadError(throwError))
 import Data.Bifunctor (Bifunctor(first))
 import Data.Time (diffDays, Day)
 import Text.Read (readEither)
