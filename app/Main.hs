@@ -10,11 +10,11 @@ import Data.Either (partitionEithers)
 import Data.Time (getCurrentTime, UTCTime(utctDay))
 import qualified Data.Text as T
 
-columnPaddingSpaces :: Int
-columnPaddingSpaces = 3
+columnPadding :: Int
+columnPadding = 3
 
-csvSeparator :: String
-csvSeparator = ","
+separator :: String
+separator = ","
 
 main :: IO ()
 main =
@@ -30,8 +30,8 @@ main =
             today <- liftIO $ utctDay <$> getCurrentTime
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                (errors, summaries) = partitionEithers $ map (parseLine today csvSeparator) lines_
-                columnWidths = computeColumnWidths columnPaddingSpaces summaries
+                (errors, summaries) = partitionEithers $ map (parseLine today separator) lines_
+                columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
                 putStrLn $ "This file has " ++ charCount ++ " total character(s) and " ++ lineCount ++ " data line(s)."
                 printSummaries columnWidths summaries
