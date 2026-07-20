@@ -1,6 +1,6 @@
-# days-away
+# Days Away
 
-A simply command line application that lists how many days away dates in a CSV file are from today. This is a small Haskell practice project.
+This is a small Haskell command line application that lists how many days away dates in a CSV file are from today.
 
 ## Requirements
 
