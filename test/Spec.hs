@@ -2,3 +2,4 @@
 
 import Test.Hspec
 import FormatCommasSpec
+import ParseLineSpec
