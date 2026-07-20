@@ -33,7 +33,7 @@ library
       Paths_days_away
   hs-source-dirs:
       src
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wincomplete-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wshadow -Wwarn-tabs
+  ghc-options: -Wall -Wcompat -Wcpp-undef -Werror=missing-home-modules -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wtabs
   build-depends:
       base >=4.7 && <5
     , filepath
@@ -54,7 +54,7 @@ executable days-away-exe
   default-extensions:
       ScopedTypeVariables
       TypeApplications
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wincomplete-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wshadow -Wwarn-tabs -threaded -rtsopts -with-rtsopts=-N -Wno-unused-top-binds
+  ghc-options: -Wall -Wcompat -Wcpp-undef -Werror=missing-home-modules -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wtabs -threaded -rtsopts -with-rtsopts=-N -Wno-unused-top-binds
   build-depends:
       base >=4.7 && <5
     , days-away
@@ -75,7 +75,7 @@ test-suite days-away-test
       Paths_days_away
   hs-source-dirs:
       test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wincomplete-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wshadow -Wwarn-tabs -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wcpp-undef -Werror=missing-home-modules -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wtabs -threaded -rtsopts -with-rtsopts=-N
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:

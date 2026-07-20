@@ -24,16 +24,18 @@ dependencies:
 ghc-options:
 - -Wall
 - -Wcompat
+- -Wcpp-undef
+# - -Wmissing-home-modules
+- -Werror=missing-home-modules
 - -Widentities
+- -Wincomplete-patterns
 - -Wincomplete-record-updates
 - -Wincomplete-uni-patterns
-- -Wincomplete-patterns
 - -Wmissing-export-lists
-- -Wmissing-home-modules
+- -Wname-shadowing
 - -Wpartial-fields
 - -Wredundant-constraints
-- -Wshadow
-- -Wwarn-tabs
+- -Wtabs
 
 library:
   source-dirs: src
