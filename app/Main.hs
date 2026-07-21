@@ -2,7 +2,7 @@ module Main (main) where
 
 import IO (readSmallFile, printSummaries, printErrors)
 import Types (computeColumnWidths, parseLine)
-import Validation (validateArgs, validateContent, validateExtension, validateLines)
+import Validation (validateArgs, validateContent, validateExtension, validateLines, dropInvalidLines)
 import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (runExceptT, ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
@@ -36,11 +36,3 @@ main =
                 putStrLn $ "This file has " ++ charCount ++ " total character(s) and " ++ lineCount ++ " data line(s)."
                 printSummaries columnWidths summaries
                 printErrors errors
-
-dropInvalidLines :: [T.Text] -> [T.Text]
-dropInvalidLines = filter isDataLine
-  where
-    commentMarker = '#'
-    isDataLine line = case T.uncons line of
-                      Just (hd, _) -> hd /= commentMarker
-                      _            -> False

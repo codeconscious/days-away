@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (validateArgs, validateExtension, validateContent, validateLines) where
+module Validation (validateArgs, validateExtension, validateContent, validateLines, dropInvalidLines) where
 
 import qualified Data.Text as T
 import Control.Monad.Except (MonadError(throwError), ExceptT)
@@ -36,3 +36,11 @@ validateLines lines_ =
     case null lines_ of
         True  -> throwError "The file has text, but no data lines were found."
         False -> return ()
+
+dropInvalidLines :: [T.Text] -> [T.Text]
+dropInvalidLines = filter isDataLine
+  where
+    commentMarker = '#'
+    isDataLine line = case T.uncons line of
+                      Just (hd, _) -> hd /= commentMarker
+                      _            -> False
