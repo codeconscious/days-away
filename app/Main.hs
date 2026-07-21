@@ -19,7 +19,7 @@ separator = ","
 main :: IO ()
 main =
     runExceptT computation >>= either putStrLn return
-    where
+      where
         computation :: ExceptT String IO () = do
             today <- liftIO $ utctDay <$> getCurrentTime
             content <- validateArgs
@@ -32,6 +32,6 @@ main =
                 (errors, summaries) = partitionEithers $ map (parseLine today separator) lines_
                 columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
-                putStrLn $ "This file has " ++ charCount ++ " total character(s) and " ++ lineCount ++ " data line(s)."
+                putStrLn $ "File has " <> charCount <> " total character(s) and " <> lineCount <> " data line(s)."
                 printSummaries columnWidths summaries
                 printErrors errors
