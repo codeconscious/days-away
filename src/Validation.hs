@@ -17,7 +17,7 @@ validateArgs = do
         [arg] -> return arg
         _     -> throwError "Too many arguments! Provide only the name of a properly-formatted CSV file."
 
-validateExtension :: FilePath -> Either String FilePath
+validateExtension :: FilePath -> ExceptT String IO FilePath
 validateExtension path
     | isSupportedExt = return path
     | otherwise      = throwError $ "Invalid file extension: " ++ ext
@@ -25,13 +25,13 @@ validateExtension path
         ext = map toLower $ takeExtension path
         isSupportedExt = ext == ".csv"
 
-validateContent :: T.Text -> Either String T.Text
+validateContent :: T.Text -> ExceptT String IO T.Text
 validateContent text =
     case T.null text of
         True  -> throwError "The file was empty."
         False -> return text
 
-validateLines :: [T.Text] -> Either String [T.Text]
+validateLines :: [T.Text] -> ExceptT String IO [T.Text]
 validateLines lines_ =
     case null lines_ of
         True  -> throwError "The file has text, but no data lines were found."

@@ -3,7 +3,6 @@ module Main (main) where
 import IO (readSmallFile, printSummaries, printErrors)
 import Types (computeColumnWidths, parseLine)
 import Validation (validateArgs, validateContent, validateExtension, validateLines, dropInvalidLines)
-import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (runExceptT, ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
@@ -23,10 +22,10 @@ main =
         computation :: ExceptT String IO () = do
             today <- liftIO $ utctDay <$> getCurrentTime
             content <- validateArgs
-                       >>= liftEither . validateExtension
+                       >>= validateExtension
                        >>= readSmallFile
-                       >>= liftEither . validateContent
-            lines_ <- liftEither $ validateLines $ dropInvalidLines $ T.lines content
+                       >>= validateContent
+            lines_ <- validateLines $ dropInvalidLines $ T.lines content
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
                 (errors, summaries) = partitionEithers $ map (parseLine today separator) lines_
