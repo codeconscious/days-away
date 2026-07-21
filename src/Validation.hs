@@ -31,11 +31,11 @@ validateContent text =
         True  -> throwError "The file was empty."
         False -> return text
 
-validateLines :: [T.Text] -> Either String ()
+validateLines :: [T.Text] -> Either String [T.Text]
 validateLines lines_ =
     case null lines_ of
         True  -> throwError "The file has text, but no data lines were found."
-        False -> return ()
+        False -> return lines_
 
 dropInvalidLines :: [T.Text] -> [T.Text]
 dropInvalidLines = filter isDataLine

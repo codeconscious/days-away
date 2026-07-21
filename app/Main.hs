@@ -26,8 +26,7 @@ main =
                        >>= liftEither . validateExtension
                        >>= readSmallFile
                        >>= liftEither . validateContent
-            let lines_ = dropInvalidLines $ T.lines content
-            liftEither $ validateLines lines_
+            lines_ <- liftEither $ validateLines $ dropInvalidLines $ T.lines content
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
                 (errors, summaries) = partitionEithers $ map (parseLine today separator) lines_
