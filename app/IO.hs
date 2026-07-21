@@ -14,6 +14,7 @@ import Data.Ord (comparing)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
+-- |Reads text files in a manner that is fine for small files, but inefficient for large ones.
 readSmallFile :: FilePath -> ExceptT String IO T.Text
 readSmallFile filePath = do
     result <- liftIO $ try @IOException (T.readFile filePath)
