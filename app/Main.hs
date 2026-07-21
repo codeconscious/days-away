@@ -20,12 +20,9 @@ main =
     runExceptT computation >>= either putStrLn return
       where
         computation :: ExceptT String IO () = do
-            today <- liftIO $ utctDay <$> getCurrentTime
-            content <- validateArgs
-                       >>= validateExtension
-                       >>= readSmallFile
-                       >>= validateContent
-            lines_ <- validateLines $ dropInvalidLines $ T.lines content
+            today   <- liftIO $ utctDay <$> getCurrentTime
+            content <- validateArgs >>= validateExtension >>= readSmallFile >>= validateContent
+            lines_  <- validateLines $ dropInvalidLines $ T.lines content
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
                 (errors, summaries) = partitionEithers $ map (parseLine today separator) lines_
