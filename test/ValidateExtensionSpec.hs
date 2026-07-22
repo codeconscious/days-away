@@ -42,6 +42,12 @@ spec = do
         Left err -> err `shouldContain` "Invalid file extension:"
         Right _ -> expectationFailure "Should reject .xlsx"
 
+    it "rejects extension of full-width characters" $ do
+      result <- runExceptT $ validateExtension "file.ｃｓｖ"
+      case result of
+        Left err -> err `shouldContain` "Invalid file extension:"
+        Right _ -> expectationFailure "Should reject .ｃｓｖ"
+
     it "rejects file with no extension" $ do
       result <- runExceptT $ validateExtension "data"
       case result of
