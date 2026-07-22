@@ -20,12 +20,12 @@ main =
     runExceptT computation >>= either putStrLn return
       where
         computation :: ExceptT String IO () = do
-            today   <- liftIO $ utctDay <$> getCurrentTime
+            today <- liftIO $ utctDay <$> getCurrentTime
             content <- validateArgs >>= validateExtension >>= readSmallFile >>= validateContent
-            lines_  <- validateLines $ dropInvalidLines $ T.lines content
+            lines_ <- validateLines $ dropInvalidLines $ T.lines content
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                (errors, summaries) = partitionEithers $ map (parseLine today separator) lines_
+                (errors, summaries) = partitionEithers $ parseLine today separator <$> lines_
                 columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
                 putStrLn $ "File has " <> charCount <> " total character(s) and " <> lineCount <> " data line(s)."
