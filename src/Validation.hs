@@ -20,7 +20,7 @@ validateArgs = do
 validateExtension :: FilePath -> ExceptT String IO FilePath
 validateExtension path
     | isSupportedExt = return path
-    | otherwise      = throwError $ "Invalid file extension: " ++ ext
+    | otherwise      = throwError $ "Invalid file extension: " <> ext
     where
         ext = map toLower $ takeExtension path
         isSupportedExt = ext == ".csv"

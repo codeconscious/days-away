@@ -5,7 +5,7 @@ import Data.List (intercalate)
 
 -- |Format integer into comma-separated thousands.
 formatCommas :: Integer -> T.Text
-formatCommas n = T.pack $ sign ++ intercalate "," (reverse $ map reverse $ chunksOf 3 $ reverse $ show $ abs n)
+formatCommas n = T.pack $ sign <> intercalate "," (reverse $ map reverse $ chunksOf 3 $ reverse $ show $ abs n)
   where
     sign = if n < 0 then "-" else ""
     chunksOf _ [] = []

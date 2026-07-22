@@ -18,7 +18,7 @@ import qualified Data.Text.IO as T
 readSmallFile :: FilePath -> ExceptT String IO T.Text
 readSmallFile filePath = do
     result <- liftIO $ try @IOException (T.readFile filePath)
-    liftEither $ first (("Error reading file: " ++) . show) result
+    liftEither $ first (("Error reading file: " <>) . show) result
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
@@ -27,5 +27,5 @@ printSummaries colWidths summaries = do
 printErrors :: [String] -> IO ()
 printErrors errs = do
     unless (null errs) $ do
-        putStrLn $ show (length errs) ++ " parse error(s):"
+        putStrLn $ show (length errs) <> " parse error(s):"
         mapM_ putStrLn errs
