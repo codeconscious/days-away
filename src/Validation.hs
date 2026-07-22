@@ -1,21 +1,25 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (validateArgs, validateExtension, validateContent, validateLines, dropInvalidLines) where
+module Validation (validateArgs, validateArgsLogic, validateExtension, validateContent, validateLines, dropInvalidLines) where
 
 import qualified Data.Text as T
+import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Char (toLower)
 import System.Environment (getArgs)
 import System.FilePath (takeExtension)
 
+validateArgsLogic :: [String] -> Either String FilePath
+validateArgsLogic args = case args of
+    []    -> Left "You must provide the name of a properly-formatted CSV file as an argument."
+    [arg] -> Right arg
+    _     -> Left "Too many arguments! Provide only the name of a properly-formatted CSV file."
+
 validateArgs :: ExceptT String IO FilePath
 validateArgs = do
     args <- liftIO getArgs
-    case args of
-        []    -> throwError "You must provide the name of a properly-formatted CSV file as an argument."
-        [arg] -> return arg
-        _     -> throwError "Too many arguments! Provide only the name of a properly-formatted CSV file."
+    liftEither $ validateArgsLogic args
 
 validateExtension :: FilePath -> ExceptT String IO FilePath
 validateExtension path
