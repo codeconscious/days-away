@@ -25,11 +25,11 @@ spec = do
 
     it "left-justifies summary field" $ do
       let result = showWithColumns widths (row (T.pack "Work") (T.pack "Report") 0)
-      (take 15 $ drop 10 result) `shouldBe` "Report         "
+      take 15 (drop 10 result) `shouldBe` "Report         "
 
     it "left-justifies date field" $ do
       let result = showWithColumns widths (row (T.pack "Work") (T.pack "Report") 0)
-      (take 12 $ drop 25 result) `shouldBe` "2026-07-20  "
+      take 12 (drop 25 result) `shouldBe` "2026-07-20  "
 
     it "right-justifies daysAway field" $ do
       let result = showWithColumns widths (row (T.pack "Work") (T.pack "Report") 0)
@@ -61,7 +61,7 @@ spec = do
     it "does not truncate summary if text exceeds width" $ do
       let narrowWidths = ColumnWidths 10 5 12 10
           result = showWithColumns narrowWidths (row (T.pack "Work") (T.pack "ReportSummary") 0)
-      (take 13 $ drop 10 result) `shouldBe` "ReportSummary"
+      take 13 (drop 10 result) `shouldBe` "ReportSummary"
 
     it "zero daysAway is right-justified" $ do
       let result = showWithColumns widths (row (T.pack "Task") (T.pack "Summary") 0)
