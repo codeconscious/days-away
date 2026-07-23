@@ -3,6 +3,7 @@
 module IO (readSmallFile, printSummaries, printErrors) where
 
 import Types (showWithColumns, ColumnWidths, RowSummary(..))
+import Validation(ValidatedFilePath(..))
 import Control.Exception (IOException, try)
 import Control.Monad (unless)
 import Control.Monad.Error.Class (liftEither)
@@ -15,8 +16,8 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
 -- |Reads text files in a manner that is fine for small files, but inefficient for large ones.
-readSmallFile :: FilePath -> ExceptT String IO T.Text
-readSmallFile filePath = do
+readSmallFile :: ValidatedFilePath -> ExceptT String IO T.Text
+readSmallFile (ValidatedFilePath filePath) = do
     result <- liftIO $ try @IOException (T.readFile filePath)
     liftEither $ first (("Error reading file: " <>) . show) result
 

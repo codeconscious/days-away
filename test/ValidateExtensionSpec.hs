@@ -10,19 +10,19 @@ spec = do
 
     it "accepts .csv extension" $ do
       result <- runExceptT $ validateExtension "data.csv"
-      result `shouldBe` Right "data.csv"
+      result `shouldBe` Right (ValidatedFilePath "data.csv")
 
     it "accepts uppercase .CSV extension" $ do
       result <- runExceptT $ validateExtension "data.CSV"
-      result `shouldBe` Right "data.CSV"
+      result `shouldBe` Right (ValidatedFilePath "data.CSV")
 
     it "accepts mixed case .Csv extension" $ do
       result <- runExceptT $ validateExtension "data.Csv"
-      result `shouldBe` Right "data.Csv"
+      result `shouldBe` Right (ValidatedFilePath "data.Csv")
 
     it "accepts .cSv extension" $ do
       result <- runExceptT $ validateExtension "data.cSv"
-      result `shouldBe` Right "data.cSv"
+      result `shouldBe` Right (ValidatedFilePath "data.cSv")
 
     it "rejects .txt extension" $ do
       result <- runExceptT $ validateExtension "data.txt"
@@ -56,15 +56,15 @@ spec = do
 
     it "accepts .csv with directory path" $ do
       result <- runExceptT $ validateExtension "/home/user/documents/data.csv"
-      result `shouldBe` Right "/home/user/documents/data.csv"
+      result `shouldBe` Right (ValidatedFilePath "/home/user/documents/data.csv")
 
     it "accepts .csv with relative path" $ do
       result <- runExceptT $ validateExtension "../../data/data.csv"
-      result `shouldBe` Right "../../data/data.csv"
+      result `shouldBe` Right (ValidatedFilePath "../../data/data.csv")
 
     it "accepts .csv with dots in filename" $ do
       result <- runExceptT $ validateExtension "data.backup.2026.07.20.csv"
-      result `shouldBe` Right "data.backup.2026.07.20.csv"
+      result `shouldBe` Right (ValidatedFilePath "data.backup.2026.07.20.csv")
 
     it "rejects .csv with trailing text" $ do
       result <- runExceptT $ validateExtension "data.csv.backup"
@@ -78,15 +78,15 @@ spec = do
         Left err -> err `shouldContain` ".txt"
         Right _ -> expectationFailure "Should reject .txt"
 
-    it "returns original path on success" $ do
+    it "returns ValidatedFilePath wrapper on success" $ do
       let testPath = "/path/to/my/file.csv"
       result <- runExceptT $ validateExtension testPath
-      result `shouldBe` Right testPath
+      result `shouldBe` Right (ValidatedFilePath testPath)
 
     it "handles Windows-style paths with .csv" $ do
       result <- runExceptT $ validateExtension "C:\\Users\\Documents\\data.csv"
-      result `shouldBe` Right "C:\\Users\\Documents\\data.csv"
+      result `shouldBe` Right (ValidatedFilePath "C:\\Users\\Documents\\data.csv")
 
     it "handles empty filename with extension" $ do
       result <- runExceptT $ validateExtension ".csv"
-      result `shouldBe` Right ".csv"
+      result `shouldBe` Right (ValidatedFilePath ".csv")

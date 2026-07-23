@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (validateArgs, validateArgsLogic, validateExtension, validateContent, validateLines, dropInvalidLines) where
+module Validation (validateArgs, validateArgsLogic, validateExtension, validateContent, validateLines, dropInvalidLines, ValidatedFilePath(..)) where
 
 import qualified Data.Text as T
 import Control.Monad.Error.Class (liftEither)
@@ -9,6 +9,9 @@ import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Char (toLower)
 import System.Environment (getArgs)
 import System.FilePath (takeExtension)
+
+newtype ValidatedFilePath = ValidatedFilePath FilePath
+                            deriving (Show, Eq)
 
 validateArgsLogic :: [String] -> Either String FilePath
 validateArgsLogic args = case args of
@@ -21,9 +24,9 @@ validateArgs = do
     args <- liftIO getArgs
     liftEither $ validateArgsLogic args
 
-validateExtension :: FilePath -> ExceptT String IO FilePath
+validateExtension :: FilePath -> ExceptT String IO ValidatedFilePath
 validateExtension path
-    | isSupportedExt = return path
+    | isSupportedExt = return $ ValidatedFilePath path
     | otherwise      = throwError $ "Invalid file extension: " <> ext
     where
         ext = map toLower $ takeExtension path
