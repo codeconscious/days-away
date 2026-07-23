@@ -28,6 +28,6 @@ main =
                 (errors, summaries) = partitionEithers $ parseLine today separator <$> lines_
                 columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
-                putStrLn $ "File has " <> charCount <> " total character(s) and " <> lineCount <> " data line(s)."
+                putStrLn $ unwords ["File has", charCount, "total character(s) and", lineCount, "data line(s)."]
                 printSummaries columnWidths summaries
                 printErrors errors
