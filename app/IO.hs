@@ -23,7 +23,9 @@ readSmallFile (ValidatedFilePath filePath) = do
 
 printSummaries :: ColumnWidths -> [RowSummary] -> IO ()
 printSummaries colWidths summaries = do
-    mapM_ (putStrLn . showWithColumns colWidths) $ sortBy (comparing category) summaries
+    mapM_ (putStrLn . showWithColumns colWidths)
+        $ sortBy (comparing category <> comparing summary) summaries
+
 
 printErrors :: [String] -> IO ()
 printErrors errs = do
