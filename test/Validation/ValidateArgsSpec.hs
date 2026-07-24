@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
 
-module ValidateArgsSpec (spec) where
+module Validation.ValidateArgsSpec (spec) where
 
 import Test.Hspec
 import Validation

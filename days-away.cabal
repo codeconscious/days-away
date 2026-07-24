@@ -68,12 +68,12 @@ test-suite days-away-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      ComputeColumnWidthsSpec
-      FormatCommasSpec
-      ParseLineSpec
-      ShowWithColumnsSpec
-      ValidateArgsSpec
-      ValidateExtensionSpec
+      Lib.FormatCommasSpec
+      Types.ComputeColumnWidthsSpec
+      Types.ParseLineSpec
+      Types.ShowWithColumnsSpec
+      Validation.ValidateArgsSpec
+      Validation.ValidateExtensionSpec
       Paths_days_away
   autogen-modules:
       Paths_days_away

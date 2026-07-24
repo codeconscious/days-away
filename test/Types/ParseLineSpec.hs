@@ -1,4 +1,4 @@
-module ParseLineSpec (spec) where
+module Types.ParseLineSpec (spec) where
 
 import Test.Hspec
 import Types

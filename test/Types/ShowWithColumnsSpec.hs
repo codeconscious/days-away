@@ -1,4 +1,4 @@
-module ShowWithColumnsSpec (spec) where
+module Types.ShowWithColumnsSpec (spec) where
 
 import Test.Hspec
 import Types

@@ -1,4 +1,4 @@
-module ValidateExtensionSpec (spec) where
+module Validation.ValidateExtensionSpec (spec) where
 
 import Test.Hspec
 import Validation

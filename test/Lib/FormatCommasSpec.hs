@@ -1,4 +1,4 @@
-module FormatCommasSpec (spec) where
+module Lib.FormatCommasSpec (spec) where
 
 import Test.Hspec
 import Lib

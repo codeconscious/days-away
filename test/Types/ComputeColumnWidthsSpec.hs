@@ -1,4 +1,4 @@
-module ComputeColumnWidthsSpec (spec) where
+module Types.ComputeColumnWidthsSpec (spec) where
 
 import Test.Hspec
 import Types
