@@ -1,13 +1,14 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
-module Validation (
-    validateArgs,
-    validateArgsLogic,
-    validateExtension,
-    validateContent,
-    validateLines,
-    dropInvalidLines,
-    ValidatedFilePath(..)) where
+module Validation
+    ( validateArgs
+    , validateArgsLogic
+    , validateExtension
+    , validateContent
+    , validateLines
+    , dropInvalidLines
+    , ValidatedFilePath(..)
+    ) where
 
 import qualified Data.Text as T
 import Control.Monad.Error.Class (liftEither)
