@@ -25,7 +25,7 @@ source-repository head
 library
   exposed-modules:
       Lib
-      Types
+      CsvData
       Validation
   other-modules:
       Paths_days_away
@@ -68,10 +68,10 @@ test-suite days-away-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      CsvData.ComputeColumnWidthsSpec
+      CsvData.ParseLineSpec
+      CsvData.ShowWithColumnsSpec
       Lib.FormatCommasSpec
-      Types.ComputeColumnWidthsSpec
-      Types.ParseLineSpec
-      Types.ShowWithColumnsSpec
       Validation.ValidateArgsSpec
       Validation.ValidateExtensionSpec
       Paths_days_away

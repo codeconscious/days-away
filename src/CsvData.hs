@@ -1,4 +1,9 @@
-module Types (RowSummary(..), ColumnWidths(..), showWithColumns, computeColumnWidths, parseLine) where
+module CsvData
+  ( RowSummary(..)
+  , ColumnWidths(..)
+  , showWithColumns
+  , computeColumnWidths
+  , parseLine) where
 
 import Lib (formatCommas)
 import Control.Monad.Error.Class (liftEither)

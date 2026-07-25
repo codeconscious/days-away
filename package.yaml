@@ -46,7 +46,7 @@ library:
   - time
   exposed-modules:
     - Lib
-    - Types
+    - CsvData
     - Validation
 
 executables:

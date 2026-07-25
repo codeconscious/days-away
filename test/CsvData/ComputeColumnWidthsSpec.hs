@@ -1,7 +1,7 @@
-module Types.ComputeColumnWidthsSpec (spec) where
+module CsvData.ComputeColumnWidthsSpec (spec) where
 
 import Test.Hspec
-import Types
+import CsvData
 import qualified Data.Text as T
 import Data.Time (fromGregorian)
 

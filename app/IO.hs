@@ -2,7 +2,7 @@
 
 module IO (readSmallFile, printSummaries, printErrors) where
 
-import Types (showWithColumns, ColumnWidths, RowSummary(..))
+import CsvData (showWithColumns, ColumnWidths, RowSummary(..))
 import Validation(ValidatedFilePath(..))
 import Control.Exception (IOException, try)
 import Control.Monad (unless)

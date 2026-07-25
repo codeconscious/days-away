@@ -1,7 +1,7 @@
-module Types.ShowWithColumnsSpec (spec) where
+module CsvData.ShowWithColumnsSpec (spec) where
 
 import Test.Hspec
-import Types
+import CsvData
 import Data.Time (fromGregorian)
 import qualified Data.Text as T
 

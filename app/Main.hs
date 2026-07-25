@@ -1,7 +1,7 @@
 module Main (main) where
 
 import IO (readSmallFile, printSummaries, printErrors)
-import Types (computeColumnWidths, parseLine)
+import CsvData (computeColumnWidths, parseLine)
 import Validation (validateArgs, validateContent, validateExtension, validateLines, dropInvalidLines)
 import Control.Monad.Except (runExceptT, ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))

@@ -1,7 +1,7 @@
-module Types.ParseLineSpec (spec) where
+module CsvData.ParseLineSpec (spec) where
 
 import Test.Hspec
-import Types
+import CsvData
 import Data.Time (fromGregorian)
 import qualified Data.Text as T
 
