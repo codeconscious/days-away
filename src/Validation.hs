@@ -11,7 +11,6 @@ module Validation
     ) where
 
 import qualified Data.Text as T
-import qualified Data.List.NonEmpty as NE
 import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (MonadError(throwError), ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
@@ -47,11 +46,11 @@ validateContent text =
         True  -> throwError "The file was empty."
         False -> return text
 
-validateLines :: [T.Text] -> ExceptT String IO (NE.NonEmpty T.Text)
+validateLines :: [T.Text] -> ExceptT String IO [T.Text]
 validateLines lines_ =
     case null lines_ of
         True  -> throwError "The file has text, but no data lines were found."
-        False -> return $ NE.fromList lines_
+        False -> return lines_
 
 dropInvalidLines :: [T.Text] -> [T.Text]
 dropInvalidLines = filter isDataLine
