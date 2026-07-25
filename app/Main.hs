@@ -8,6 +8,7 @@ import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
 import Data.Time (getCurrentTime, UTCTime(utctDay))
 import qualified Data.Text as T
+import qualified Data.List.NonEmpty as NE
 
 columnPadding :: Int
 columnPadding = 3
@@ -25,7 +26,7 @@ main =
             lines_ <- validateLines $ dropInvalidLines $ T.lines content
             let lineCount = show $ length lines_
                 charCount = show $ T.length content
-                (errors, summaries) = partitionEithers $ parseLine today separator <$> lines_
+                (errors, summaries) = partitionEithers $ NE.toList $ NE.map (parseLine today separator) lines_
                 columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
                 putStrLn $ unwords ["File has", charCount, "total character(s) and", lineCount, "data line(s)."]
