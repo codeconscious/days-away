@@ -35,10 +35,10 @@ validateArgs = do
 validateExtension :: FilePath -> ExceptT String IO ValidatedFilePath
 validateExtension path
     | isSupportedExt = return $ ValidatedFilePath path
-    | otherwise      = throwError $ "Invalid file extension: " <> ext
+    | otherwise      = throwError $ "Invalid file extension: " <> extension
     where
-        ext = map toLower $ takeExtension path
-        isSupportedExt = ext == ".csv"
+        extension = takeExtension path
+        isSupportedExt = map toLower extension == ".csv"
 
 validateContent :: T.Text -> ExceptT String IO T.Text
 validateContent text =
