@@ -56,4 +56,4 @@ dropInvalidLines = filter isDataLine
     commentMarker = '#'
     isDataLine line = case T.uncons line of
                       Just (hd, _) -> hd /= commentMarker
-                      _            -> False
+                      Nothing      -> False
