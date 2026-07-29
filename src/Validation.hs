@@ -54,6 +54,4 @@ dropInvalidLines :: [T.Text] -> [T.Text]
 dropInvalidLines = filter isDataLine
   where
     commentMarker = '#'
-    isDataLine line = case T.uncons line of
-                      Just (hd, _) -> hd /= commentMarker
-                      Nothing      -> False
+    isDataLine line = not (T.null line) && T.head line /= commentMarker
