@@ -41,16 +41,14 @@ validateExtension path
         isSupportedExt = map toLower extension == ".csv"
 
 validateContent :: T.Text -> ExceptT String IO T.Text
-validateContent text =
-    case T.null text of
-        True  -> throwError "The file was empty."
-        False -> return text
+validateContent text
+    | T.null text = throwError "The file was empty."
+    | otherwise   = return text
 
 validateLines :: [T.Text] -> ExceptT String IO [T.Text]
-validateLines lines_ =
-    case null lines_ of
-        True  -> throwError "The file has text, but no data lines were found."
-        False -> return lines_
+validateLines lines_
+    | null lines_ = throwError "The file has text, but no data lines were found."
+    | otherwise   = return lines_
 
 dropInvalidLines :: [T.Text] -> [T.Text]
 dropInvalidLines = filter isDataLine
