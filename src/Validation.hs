@@ -46,9 +46,9 @@ validateContent text
     | otherwise   = return text
 
 validateLines :: [T.Text] -> ExceptT String IO [T.Text]
-validateLines lines_
-    | null lines_ = throwError "The file has text, but no data lines were found."
-    | otherwise   = return lines_
+validateLines lines'
+    | null lines' = throwError "The file has text, but no data lines were found."
+    | otherwise   = return lines'
 
 dropInvalidLines :: [T.Text] -> [T.Text]
 dropInvalidLines = filter isDataLine
