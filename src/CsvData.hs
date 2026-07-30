@@ -6,7 +6,6 @@ module CsvData
   , parseLine) where
 
 import Lib (formatCommas)
-import Control.Monad.Error.Class (liftEither)
 import Control.Monad.Except (MonadError(throwError))
 import Data.Bifunctor (Bifunctor(first))
 import Data.Time (diffDays, Day)
@@ -35,7 +34,7 @@ parseLine today separator line = do
         [c, s, d] -> return (c, s, d)
         _         -> throwError $ "* Error parsing malformed line: " <> T.unpack line
 
-    parsedDate <- liftEither . first (formatDateError c s d) $ readEither (T.unpack d)
+    parsedDate <- first (formatDateError c s d) $ readEither (T.unpack d)
 
     return $ RowSummary c s parsedDate (diffDays today parsedDate)
   where
