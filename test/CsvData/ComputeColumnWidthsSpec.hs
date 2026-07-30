@@ -64,3 +64,19 @@ spec = do
       summaryWidth result `shouldSatisfy` (> 0)
       dateWidth result `shouldSatisfy` (> 0)
       daysAwayWidth result `shouldSatisfy` (> 0)
+
+    it "handles empty summaries list" $ do
+      let summaries = []
+          result = computeColumnWidths 3 summaries
+      categoryWidth result `shouldBe` 0
+      summaryWidth result `shouldBe` 0
+      dateWidth result `shouldBe` 0
+      daysAwayWidth result `shouldBe` 0
+
+    it "handles empty summaries with zero padding" $ do
+      let summaries = []
+          result = computeColumnWidths 0 summaries
+      categoryWidth result `shouldBe` 0
+      summaryWidth result `shouldBe` 0
+      dateWidth result `shouldBe` 0
+      daysAwayWidth result `shouldBe` 0

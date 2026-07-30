@@ -62,10 +62,12 @@ showWithColumns (ColumnWidths cWidth sWidth dWidth daWidth)
 -- |Gives the minimum column widths necessary to accommodate display of all row data, including padding spaces.
 computeColumnWidths :: Int -> [RowSummary] -> ColumnWidths
 computeColumnWidths padding summaries =
-    ColumnWidths c s d da
-      where
-        findWidestInColumn finder = (+ padding) $ maximum $ finder <$> summaries
-        c  = findWidestInColumn (T.length . category)
-        s  = findWidestInColumn (T.length . summary)
-        d  = findWidestInColumn (  length . show . date)
-        da = findWidestInColumn (T.length . formatCommas . daysAway)
+    case summaries of
+      [] -> ColumnWidths 0 0 0 0
+      _  -> ColumnWidths c s d da
+  where
+    findWidestInColumn finder = (+ padding) $ maximum $ finder <$> summaries
+    c  = findWidestInColumn (T.length . category)
+    s  = findWidestInColumn (T.length . summary)
+    d  = findWidestInColumn (length . show . date)
+    da = findWidestInColumn (T.length . formatCommas . daysAway)
