@@ -32,14 +32,15 @@ parseLine today separator line = do
 
     (c, s, d) <- case parts of
         [c, s, d] -> return (c, s, d)
-        _         -> throwError $ "* Error parsing malformed line: " <> T.unpack line
+        ps | length ps < 3 -> throwError $ "* Too few fields: "  <> T.unpack line
+           | otherwise     -> throwError $ "* Too many fields: " <> T.unpack line
 
     parsedDate <- first (formatDateError c s d) $ readEither (T.unpack d)
 
     return $ RowSummary c s parsedDate (diffDays today parsedDate)
   where
     formatDateError c s d _parseErr = unwords
-        [ "* Error parsing invalid date"
+        [ "* Invalid date"
         , show (T.unpack d)
         , "in line with category"
         , show (T.unpack c)

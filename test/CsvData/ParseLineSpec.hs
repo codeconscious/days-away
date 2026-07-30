@@ -42,19 +42,19 @@ spec = do
     it "rejects line with too few fields" $ do
       let line = T.pack "Work|Complete report"
       case parseLine today "|" line of
-        Left err -> err `shouldContain` "* Error parsing malformed line:"
+        Left err -> err `shouldContain` "* Too few fields:"
         Right _ -> expectationFailure "Should fail to parse"
 
     it "rejects line with too many fields" $ do
       let line = T.pack "Work|Complete report|2026-07-20|Extra"
       case parseLine today "|" line of
-        Left err -> err `shouldContain` "* Error parsing malformed line:"
+        Left err -> err `shouldContain` "* Too many fields:"
         Right _ -> expectationFailure "Should fail to parse"
 
     it "rejects invalid date format" $ do
       let line = T.pack "Work|Complete report|invalid-date"
       case parseLine today "|" line of
-        Left err -> err `shouldContain` "* Error parsing invalid date"
+        Left err -> err `shouldContain` "* Invalid date"
         Right _ -> expectationFailure "Should fail to parse"
 
     it "handles different separator characters" $ do
