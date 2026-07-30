@@ -54,7 +54,7 @@ spec = do
     it "rejects invalid date format" $ do
       let line = T.pack "Work|Complete report|invalid-date"
       case parseLine today "|" line of
-        Left err -> err `shouldContain` "* Error parsing date"
+        Left err -> err `shouldContain` "* Error parsing invalid date"
         Right _ -> expectationFailure "Should fail to parse"
 
     it "handles different separator characters" $ do

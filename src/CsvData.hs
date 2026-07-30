@@ -39,14 +39,13 @@ parseLine today separator line = do
 
     return $ RowSummary c s parsedDate (diffDays today parsedDate)
   where
-    formatDateError c s d err = unwords
-        [ "* Error parsing date"
+    formatDateError c s d _parseErr = unwords
+        [ "* Error parsing invalid date"
         , show (T.unpack d)
         , "in line with category"
         , show (T.unpack c)
         , "and summary"
-        , show (T.unpack s) <> ":"
-        , "`" <> err <> "`."
+        , show (T.unpack s) <> "."
         ]
 
 showWithColumns :: ColumnWidths -> RowSummary -> String
