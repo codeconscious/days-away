@@ -22,10 +22,9 @@ newtype ValidatedFilePath = ValidatedFilePath FilePath
                             deriving (Show, Eq)
 
 validateArgsLogic :: [String] -> Either String FilePath
-validateArgsLogic args = case args of
-    []    -> Left "You must provide the name of a properly-formatted CSV file as an argument."
-    [arg] -> Right arg
-    _     -> Left "Too many arguments! Provide only the name of a properly-formatted CSV file."
+validateArgsLogic []    = Left "You must provide the name of a properly-formatted CSV file as an argument."
+validateArgsLogic [arg] = Right arg
+validateArgsLogic _     = Left "Too many arguments! Provide only the name of a properly-formatted CSV file."
 
 validateArgs :: ExceptT String IO FilePath
 validateArgs = do
