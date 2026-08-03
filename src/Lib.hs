@@ -1,4 +1,4 @@
-module Lib (formatCommas) where
+module Lib (formatCommas, plurS) where
 
 import qualified Data.Text as T
 import Data.List (intercalate)
@@ -10,3 +10,10 @@ formatCommas n = T.pack $ sign <> intercalate "," (reverse $ map reverse $ chunk
     sign = if n < 0 then "-" else ""
     chunksOf _ [] = []
     chunksOf n' xs = take n' xs : chunksOf n' (drop n' xs)
+
+-- | Format an integer with comma-separated thousands and pluralize a noun with `s`.
+plurS :: Integer -> String -> String
+plurS i text = unwords [T.unpack $ formatCommas i, plural i text]
+  where
+    plural 1 t = t
+    plural _ t = t <> "s"

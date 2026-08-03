@@ -1,6 +1,7 @@
 module Main (main) where
 
 import IO (readSmallFile, printSummaries, printErrors)
+import Lib (plurS)
 import CsvData (computeColumnWidths, parseLine)
 import Validation (validateArgs, validateContent, validateExtension, validateLines, dropInvalidLines)
 import Control.Monad.Except (runExceptT, ExceptT)
@@ -23,11 +24,11 @@ main =
             today <- liftIO $ utctDay <$> getCurrentTime
             content <- validateArgs >>= validateExtension >>= readSmallFile >>= validateContent
             lines' <- validateLines $ dropInvalidLines $ T.lines content
-            let lineCount = show $ length lines'
-                charCount = show $ T.length content
+            let charCount = plurS (toInteger $ T.length content) "character"
+                lineCount = plurS (toInteger $ length lines') "data line"
                 (errors, summaries) = partitionEithers $ parseLine today separator <$> lines'
                 columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
-                putStrLn $ unwords ["File has", charCount, "total character(s) and", lineCount, "data line(s)."]
+                putStrLn $ "File has " <> charCount <> " and " <> lineCount <> "."
                 printSummaries columnWidths summaries
                 printErrors errors
