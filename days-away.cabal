@@ -72,6 +72,7 @@ test-suite days-away-test
       CsvData.ParseLineSpec
       CsvData.ShowWithColumnsSpec
       Lib.FormatCommasSpec
+      Lib.PlurSpec
       Validation.ValidateArgsSpec
       Validation.ValidateExtensionSpec
       Paths_days_away
