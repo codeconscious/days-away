@@ -7,6 +7,7 @@ import Validation (validateArgs, validateContent, validateExtension, validateLin
 import Control.Monad.Except (runExceptT, ExceptT)
 import Control.Monad.IO.Class (MonadIO(liftIO))
 import Data.Either (partitionEithers)
+import Data.List (intercalate)
 import Data.Time (getCurrentTime, UTCTime(utctDay))
 import qualified Data.Text as T
 
@@ -29,6 +30,6 @@ main =
                 (errors, summaries) = partitionEithers $ parseLine today separator <$> lines'
                 columnWidths = computeColumnWidths columnPadding summaries
             liftIO $ do
-                putStrLn $ "File has " <> charCount <> " and " <> lineCount <> "."
+                putStrLn $ "File summary: " <> intercalate ", " [charCount, lineCount] <> "."
                 printSummaries columnWidths summaries
                 printErrors errors
