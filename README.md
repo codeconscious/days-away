@@ -30,10 +30,10 @@ Run using `stack run -- path_to_your_file.csv`
 Sample output:
 
 ```
-This file has 184 total character(s) and 4 data line(s).
-Test   Super Nintendo release date in U.S.   1991-08-23      12,742
-Test   Future date                           2040-05-01      -5,042
-There were 2 parse error(s):
-* Error parsing date "2040-A-01" in line with category "Test" and summary "Invalid data": `Prelude.read: no parse`.
-* Error parsing malformed line: Test, Invalid data, 2073-01-01, Extra column!
+File summary: 371 characters, 4 data lines.
+Test   Future date                           2040-05-01      -5,015
+Test   Super Nintendo release date in U.S.   1991-08-23      12,769
+2 parse error(s):
+* Invalid date "2040-A-01" in line with category "Test" and summary "Invalid data".
+* Too many fields: Test, Invalid data, 2073-01-01, Extra column!
 ```
