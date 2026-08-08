@@ -1,3 +1,6 @@
+*.csv
+
+# Haskell
 dist
 dist-*
 cabal-dev
