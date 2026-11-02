@@ -19,12 +19,12 @@ data PluralType
     | Irreg String -- ^ Irregular plural form provided as a string (e.g., "child" → "children")
 
 -- | Format an integer with comma-separated thousands and pluralizes its noun as appropriate.
--- | Does not handle all-caps text. In that case, pass an Irreg term.
+-- | Does not handle all-caps text. In that case, pass an Irreg PluralType.
 plur :: PluralType -> Integer -> String -> String
-plur pt i text = unwords [T.unpack $ formatCommas i, plural pt i text]
+plur pType count word = unwords [T.unpack $ formatCommas count, inflect pType count word]
   where
-    plural _ n t | abs n == 1 = t
-    plural S _ t = t <> "s"
-    plural Es _ t = t <> "es"
-    plural Same _ t = t
-    plural (Irreg t') _ _ = t'
+    inflect _ n t | abs n == 1 = t
+    inflect S _ t              = t <> "s"
+    inflect Es _ t             = t <> "es"
+    inflect Same _ t           = t
+    inflect (Irreg t) _ _      = t
